@@ -1,12 +1,10 @@
 import initApp from "./app";
-import https from "https";
 import http, { Server } from "http";
-import fs from "fs";
 import swaggerUI from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
 
 initApp().then((app) => {
-  let port: string = '3000';
+  let port: string = process.env.PORT;
 
   const options = {
     definition: {

@@ -4,13 +4,13 @@ import express, { Express } from "express";
 import mongoose from "mongoose";
 // import BaseRouter from "./routes/index";
 
-// dotenv.config();
+dotenv.config();
 
 const initApp = async (): Promise<Express> => {
   try {
 
-    // await mongoose.connect(process.env.DB_URL);
-    // console.log("Connected to DB");
+    await mongoose.connect(process.env.DB_URL);
+    console.log("Connected to DB");
     const app = express();
 
     /************************************************************************************
@@ -25,10 +25,10 @@ const initApp = async (): Promise<Express> => {
     // app.use("/api", BaseRouter);
     // app.use("/public", express.static("public"));
 
-    // mongoose.connection.once("open", () =>
-    //   console.log("Connected to Database")
-    // );
-    // mongoose.connection.on("error", (error) => console.error(error));
+    mongoose.connection.once("open", () =>
+      console.log("Connected to Database")
+    );
+    mongoose.connection.on("error", (error) => console.error(error));
 
     app.get('/', (req, res) => {
       res.send('Hello World');  
