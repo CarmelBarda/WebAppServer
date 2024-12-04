@@ -7,11 +7,11 @@ export class BaseController<ModelType> {
     this.model = model;
   }
 
-  async getAll(req: Request, res: Response, selectFields?: string[]) {
+  async getAll(req: Request, res: Response, selectFields: string[] = []) {
     try {
       const model = await this.model.find().select(selectFields);
 
-      if (model.length === 0) {
+      if (model?.length === 0) {
         return res.status(404).json({ message: "Model not found" });
       }
 
