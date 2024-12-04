@@ -21,9 +21,13 @@ export class TestController extends BaseController<IUser> {
 
     async get(req: Request, res: Response) {
         try {
-          const posts = await this.getTests({});    
+            // const allUsers = await this.getTests({}); 
+          const userById = await this.getTests({
+            _id: new mongoose.Types.ObjectId('675016b349f76c9c0a7ab99a')
+          });    
+          // sent name param
           const param = req.query.param;
-          res.status(200).send([...posts, param]);
+          res.status(200).send([...userById, param]);
         } catch (err) {
           res.status(500).json({ message: err.message });
         }
