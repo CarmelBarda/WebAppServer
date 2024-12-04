@@ -2,7 +2,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express, { Express } from "express";
 import mongoose from "mongoose";
-// import BaseRouter from "./routes/index";
+import BaseRouter from "./routes/index";
 
 dotenv.config();
 
@@ -11,6 +11,7 @@ const initApp = async (): Promise<Express> => {
 
     await mongoose.connect(process.env.DB_URL);
     console.log("Connected to DB");
+    const db = mongoose.connection;
     const app = express();
 
     /************************************************************************************
@@ -22,23 +23,18 @@ const initApp = async (): Promise<Express> => {
     // app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
     // Add APIs
-    // app.use("/api", BaseRouter);
-    // app.use("/public", express.static("public"));
+    app.use("/api", BaseRouter);
 
-    mongoose.connection.once("open", () =>
+    db.once("open", () =>
       console.log("Connected to Database")
     );
-    mongoose.connection.on("error", (error) => console.error(error));
+    db.on("error", (error) => 
+      console.error(error)
+    );
 
     app.get('/', (req, res) => {
       res.send('Hello World');  
     });
-
-    // const port = 3000;
-
-    // app.listen(port, () => {
-    //   console.log(`Server listening on port ${port}`);  
-    // });
 
     return app;
   } catch (error) {
