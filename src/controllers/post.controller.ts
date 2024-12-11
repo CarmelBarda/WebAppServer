@@ -1,7 +1,8 @@
 import { FilterQuery, Model } from "mongoose";
 import { BaseController } from "./base.controller";
-import PostModel, { IPost } from "../models/post.model";
+import { IPost } from "../models/interfaces/IPost";
 import { Request, Response } from "express";
+import { Post } from "../models/models";
 
 export class PostController extends BaseController<IPost> {
     constructor(model: Model<IPost>) {
@@ -20,6 +21,6 @@ export class PostController extends BaseController<IPost> {
     }
 };
 
-const postController = new PostController(PostModel);
+const postController = new PostController(Post);
 
 export default postController;

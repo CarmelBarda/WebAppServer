@@ -1,10 +1,11 @@
-import initApp from "./app";
+import createServer from "./app";
 import http, { Server } from "http";
 import swaggerUI from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
 
-initApp().then((app) => {
-  let port: string = process.env.PORT;
+const port: string = process.env.PORT;
+
+createServer().then((app) => {
 
   const options = {
     definition: {
@@ -25,6 +26,7 @@ initApp().then((app) => {
   };
 
   const specs = swaggerJsDoc(options);
+  
   app.use("/api", swaggerUI.serve, swaggerUI.setup(specs));
   let server: Server;
   server = http.createServer(app);
