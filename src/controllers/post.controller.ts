@@ -24,7 +24,7 @@ export class PostController extends BaseController<IPost> {
         const postId = req.params.id;
 
         if (!mongoose.Types.ObjectId.isValid(postId)) {
-            res.status(400).send({ error: "ownerId isn't valid" });
+            res.status(400).send({ error: "post id isn't valid" });
         }
 
         const post = await this.getPostsByFilter({ 
@@ -37,7 +37,7 @@ export class PostController extends BaseController<IPost> {
     async create(req: Request, res: Response) {
         try {    
           const newPost = await super.create(req, res);
-          
+
           res.status(200).send(newPost);
         } catch (err) {
           res.status(500).json({ message: err.message });
