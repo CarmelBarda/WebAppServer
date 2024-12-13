@@ -35,10 +35,9 @@ export class PostController extends BaseController<IPost> {
     }
 
     async create(req: Request, res: Response) {
-        try {
-        //   req.body = { ...req.body, ownerId: user._id };
-    
+        try {    
           const newPost = await super.create(req, res);
+          
           res.status(200).send(newPost);
         } catch (err) {
           res.status(500).json({ message: err.message });
