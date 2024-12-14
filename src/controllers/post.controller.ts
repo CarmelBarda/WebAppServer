@@ -4,9 +4,11 @@ import { IPost } from "../models/interfaces/IPost";
 import { Request, Response } from "express";
 import { Post } from "../models/models";
 
-export class PostController extends BaseController<IPost> {
+export class PostController {
+    model: Model<IPost>;
+
     constructor(model: Model<IPost>) {
-        super(model);
+        this.model = model;
     }
 
     getPostsByFilter = (filter: FilterQuery<IPost>) => {
@@ -34,9 +36,9 @@ export class PostController extends BaseController<IPost> {
         res.status(200).send(post[0]);
     }
 
-    async createPost(req: Request, res: Response) {
+    createPost = async (req: Request, res: Response) => {
         try {    
-          const newPost = await super.create(req, res);
+          const newPost = await this.model.create(req.body);
 
           res.status(200).send(newPost);
         } catch (err) {
