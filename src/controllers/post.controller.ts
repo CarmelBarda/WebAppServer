@@ -36,7 +36,7 @@ export class PostController extends BaseController<IPost> {
 
     async createPost(req: Request, res: Response) {
         try {    
-          const newPost = await super.createPost(req, res);
+          const newPost = await super.create(req, res);
 
           res.status(200).send(newPost);
         } catch (err) {

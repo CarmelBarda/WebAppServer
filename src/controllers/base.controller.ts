@@ -5,7 +5,7 @@ export class BaseController<ModelType> {
   model: Model<ModelType>;
   constructor(model: Model<ModelType>) {
     this.model = model;
-    this.createPost = this.createPost.bind(this);
+    this.create = this.create.bind(this);
   }
 
   async getAll(req: Request, res: Response, selectFields: string[] = []) {
@@ -39,7 +39,7 @@ export class BaseController<ModelType> {
     }
   }
 
-  async createPost(req: Request, res: Response) {
+  async create(req: Request, res: Response) {
     try {
       const obj = await this.model.create(req.body);
       res.status(201).send(obj);
