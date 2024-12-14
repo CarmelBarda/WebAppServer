@@ -7,6 +7,6 @@ router.get('/', postController.getAllPosts);
 
 router.get('/:id', postController.getPostById);
 
-router.post('/', postController.create);
+router.post('/', postController.createPost);
 
 export default router;
