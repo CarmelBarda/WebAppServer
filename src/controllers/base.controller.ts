@@ -5,6 +5,7 @@ export class BaseController<ModelType> {
   model: Model<ModelType>;
   constructor(model: Model<ModelType>) {
     this.model = model;
+    this.create = this.create.bind(this);
   }
 
   async getAll(req: Request, res: Response, selectFields: string[] = []) {
