@@ -14,3 +14,16 @@ Content-Type: application/json
     "content": "Content 1",
     "owner": "675016b349f76c9c0a7ab99a"
 }
+
+### Update post
+PUT http://localhost:3000/api/post/675073bc49f76c9c0a7ab99c
+Content-Type: application/json
+
+{
+    "title": "Post 1",
+    "content": "updated Content!",
+    "owner": "675016b349f76c9c0a7ab99a"
+}
+
+### Get post by sender
+GET http://localhost:3000/api/post?sender=675016b349f76c9c0a7ab99a
