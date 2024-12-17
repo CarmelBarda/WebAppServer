@@ -27,3 +27,30 @@ Content-Type: application/json
 
 ### Get post by sender
 GET http://localhost:3000/api/post?sender=675016b349f76c9c0a7ab99a
+
+
+
+### Create comment
+POST http://localhost:3000/api/comment
+Content-Type: application/json
+
+{
+    "message": "great post!!",
+    "userId": "",
+    "postId": ""
+}
+
+### Update comment
+PUT http://localhost:3000/api/comment/:id
+Content-Type: application/json
+
+{
+    "message": "updated comment!",
+}
+
+
+### Get post's comments
+GET http://localhost:3000/api/commend?post=675073bc49f76c9c0a7ab99c
+
+
+
