@@ -51,14 +51,10 @@ export class CommentController {
 
     getPostComments = async (req: Request, res: Response) => {
         try {
-          const postId = req.params.post;
-
-        if (!mongoose.Types.ObjectId.isValid(postId)) {
-            res.status(400).send({ error: "post id isn't valid" });
-        }
+          const postId: string = req.params.post;
 
         const postComments = await this.getCommentsByFilter({ 
-            postId: new mongoose.Types.ObjectId(postId)
+            postId: postId
         });
 
         res.status(200).send(postComments);
