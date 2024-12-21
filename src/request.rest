@@ -35,22 +35,22 @@ POST http://localhost:3000/api/comment
 Content-Type: application/json
 
 {
-    "message": "great post!!",
-    "userId": "",
-    "postId": ""
+    "message": "amazinggg!!",
+    "userId": "675016b349f76c9c0a7ab99a",
+    "postId": "675073bc49f76c9c0a7ab99c"
 }
 
 ### Update comment
-PUT http://localhost:3000/api/comment/:id
+PUT http://localhost:3000/api/comment/6766b9c33fff874de7cac22c
 Content-Type: application/json
 
 {
-    "message": "updated comment!",
+    "message": "updated comment!"
 }
 
 
 ### Get post's comments
-GET http://localhost:3000/api/commend?post=675073bc49f76c9c0a7ab99c
+GET http://localhost:3000/api/comment/675073bc49f76c9c0a7ab99c
 
 
 

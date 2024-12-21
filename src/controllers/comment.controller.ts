@@ -1,5 +1,4 @@
 import mongoose, { FilterQuery, Model } from "mongoose";
-import { IPost } from "../models/interfaces/IPost";
 import { Request, Response } from "express";
 import { Comment } from "../models/models";
 import { IComment } from "../models/interfaces/IComment";
@@ -11,7 +10,7 @@ export class CommentController {
         this.model = model;
     }
 
-    getCommentsByFilter = (filter: FilterQuery<IPost>) => {
+    getCommentsByFilter = (filter: FilterQuery<IComment>) => {
         return this.model
           .aggregate()
           .match(filter)
@@ -52,7 +51,7 @@ export class CommentController {
 
     getPostComments = async (req: Request, res: Response) => {
         try {
-          const postId = req.params.sender;
+          const postId = req.params.post;
 
         if (!mongoose.Types.ObjectId.isValid(postId)) {
             res.status(400).send({ error: "post id isn't valid" });
