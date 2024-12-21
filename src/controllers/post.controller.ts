@@ -48,14 +48,10 @@ export class PostController {
 
     getPostsBySender = async (req: Request, res: Response) => {
         try {
-          const senderId = req.params.sender;
-
-        if (!mongoose.Types.ObjectId.isValid(senderId)) {
-            res.status(400).send({ error: "sender id isn't valid" });
-        }
+          const senderId = req.query.sender as string;
 
         const postsBySender = await this.getPostsByFilter({ 
-            owner: new mongoose.Types.ObjectId(senderId) 
+            owner: senderId
         });
 
         res.status(200).send(postsBySender);
