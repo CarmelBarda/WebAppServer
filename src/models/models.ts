@@ -8,5 +8,5 @@ import { commentSchema } from "./schemas/comment.schema";
 
 export const Post: Model<IPost> = model<IPost>('posts', postSchema);
 export const User: Model<IUser> = model<IUser>('users', userSchema);
-export const Comment: Model<IComment> = model<IComment>('users', commentSchema);
+export const Comment: Model<IComment> = model<IComment>('comments', commentSchema);
 

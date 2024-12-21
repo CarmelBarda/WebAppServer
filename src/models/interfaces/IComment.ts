@@ -4,6 +4,6 @@ import { IUser } from './IUser';
 export interface IComment extends Document {
     _id: mongoose.Types.ObjectId;
     message: string;
-    userId: IUser;
+    userId: string;
     postId: string;
 }
