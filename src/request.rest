@@ -1,4 +1,4 @@
-### Get all users
+### Get all posts
 GET http://localhost:3000/api/post
 Content-Type: application/json
 
@@ -29,6 +29,12 @@ Content-Type: application/json
 GET http://localhost:3000/api/post?sender=675016b349f76c9c0a7ab99a
 
 
+### Get all comments
+GET http://localhost:3000/api/comment
+Content-Type: application/json
+
+### Get comment by id
+GET http://localhost:3000/api/comment/6766baf03a9f5c7b26fc0aef
 
 ### Create comment
 POST http://localhost:3000/api/comment

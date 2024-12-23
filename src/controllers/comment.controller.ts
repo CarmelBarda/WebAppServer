@@ -16,6 +16,26 @@ export class CommentController {
           .match(filter)
     }
 
+    getAllComments = async (_: Request, res: Response) => {
+        const allcomments = await this.getCommentsByFilter({});
+      
+        res.status(200).send(allcomments);
+    }
+
+    getCommentById = async (req: Request, res: Response) => {
+      const commentId = req.params.id;
+
+      if (!mongoose.Types.ObjectId.isValid(commentId)) {
+          res.status(400).send({ error: "comment id isn't valid" });
+      }
+
+      const comment = await this.getCommentsByFilter({ 
+          _id: new mongoose.Types.ObjectId(commentId) 
+      });
+
+      res.status(200).send(comment[0]);
+    }
+
     createComment = async (req: Request, res: Response) => {
         try {
             const newComment = await this.model.create(req.body);
@@ -31,17 +51,17 @@ export class CommentController {
           const commentId = req.params.id;
           const updatedMessage = req.body;
 
-          const updatedPost = await this.model.findByIdAndUpdate(
+          const updatedComment = await this.model.findByIdAndUpdate(
             commentId,
             { $set: updatedMessage },
             { new: true }
           );
 
-          if (!updatedPost) {
+          if (!updatedComment) {
             res.status(404).json({ error: `Comment ${commentId} not found` });
           } 
 
-          res.status(200).send(updatedPost);  
+          res.status(200).send(updatedComment);  
 
         } catch (err) {
           res.status(500).json({ message: err.message });
