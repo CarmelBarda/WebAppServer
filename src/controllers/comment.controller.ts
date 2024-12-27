@@ -71,7 +71,7 @@ export class CommentController {
 
     getPostComments = async (req: Request, res: Response) => {
         try {
-          const postId: string = req.params.post;
+          const postId: string = req.query.post as string;
 
         const postComments = await this.getCommentsByFilter({ 
             postId: postId

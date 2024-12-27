@@ -49,9 +49,8 @@ Content-Type: application/json
     "message": "updated comment!"
 }
 
-
 ### Get post's comments
-GET http://localhost:3000/api/comment/675073bc49f76c9c0a7ab99c
+GET http://localhost:3000/api/comment?post=675073bc49f76c9c0a7ab99c
 
 ### Delete comment
 DELETE http://localhost:3000/api/comment/6769b1b85938d243f1752c5f

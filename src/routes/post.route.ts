@@ -8,6 +8,7 @@ router.get('/', (req, res) => {
     if (req.query.sender) {
         return postController.getPostsBySender(req, res);
     }
+    
     return postController.getAllPosts(req, res);
 });
 router.post('/', postController.createPost);
