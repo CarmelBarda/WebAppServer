@@ -121,40 +121,20 @@ router.get('/:id', postController.getPostById);
  * @swagger
 * /api/post:
  *   get:
- *     summary: Get all posts
- *     tags: [Post]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: An array of posts
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Post'
- *       500:
- *         description: Internal server error
- */
-/**
- * @swagger
-* /api/post:
- *   get:
- *     summary: Get posts by user id
+ *     summary: Get posts by user id or all posts
  *     tags: [Post]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: id of the user
+ *       - in: query
+ *         name: sender
+ *         required: false
+ *         description: id of the user whos' posts to get. if ommited, all posts will be returned
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: An array of the user's posts
+ *         description: An array of the user's posts or all posts
  *         content:
  *           application/json:
  *             schema:
