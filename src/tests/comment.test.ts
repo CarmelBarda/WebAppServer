@@ -8,7 +8,6 @@ const generateObjectId = () => new mongoose.Types.ObjectId();
 
 let app: Express;
 let accessToken: string;
-let ownerId: string;
 let postId: string;
 let commentId: string;
 
