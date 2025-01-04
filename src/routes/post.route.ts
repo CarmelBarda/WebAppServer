@@ -1,5 +1,6 @@
 import express from "express";
 import postController from "../controllers/post.controller";
+import authMiddleware from "../commons/middlewares/auth";
 
 const router = express.Router();
 
@@ -115,7 +116,7 @@ const router = express.Router();
  *       500:
  *         description: Internal server error
  */
-router.get('/:id', postController.getPostById);
+router.get('/:id', authMiddleware, postController.getPostById);
 
 /**
  * @swagger
@@ -144,7 +145,7 @@ router.get('/:id', postController.getPostById);
  *       500:
  *         description: Internal server error
  */
-router.get('/', (req, res) => {
+router.get('/', authMiddleware, (req, res) => {
     if (req.query.sender) {
         return postController.getPostsBySender(req, res);
     }
@@ -183,7 +184,7 @@ router.get('/', (req, res) => {
  *       500:
  *         description: Internal server error
  */
-router.post('/', postController.createPost);
+router.post('/', authMiddleware, postController.createPost);
 
 /**
  * @swagger
@@ -224,6 +225,6 @@ router.post('/', postController.createPost);
  *       500:
  *         description: Internal server error
  */
-router.put('/:id', postController.updatePost);
+router.put('/:id', authMiddleware, postController.updatePost);
 
 export default router;
