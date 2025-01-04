@@ -1,5 +1,5 @@
 import { NextFunction } from "express";
-import { verifyToken } from "../utils/auth";
+import { verifyTokenByAccessTokenSecret } from "../utils/auth";
 
 const authMiddleware = (req, res, next: NextFunction) => {
   const authHeader: string = req.headers["authorization"];
@@ -9,7 +9,7 @@ const authMiddleware = (req, res, next: NextFunction) => {
     return res.sendStatus(401);
   }
 
-  verifyToken(token, (err: any, user: { _id: string }) => {
+  verifyTokenByAccessTokenSecret(token, (err: any, user: { _id: string }) => {
     if (err) return res.sendStatus(401);
 
     req.user = user as { _id: string };

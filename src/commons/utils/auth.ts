@@ -10,7 +10,7 @@ export const encryptPassword = async (password: string) => {
     return encryptedPassword;
 }
 
-export const generateJWT = async (userId: ObjectId) => {
+export const generateJWTAccessToken = async (userId: ObjectId) => {
     const accessToken = await jwt.sign(
                             { '_id': userId },
                             process.env.JWT_SECRET,
@@ -20,7 +20,16 @@ export const generateJWT = async (userId: ObjectId) => {
     return accessToken;
 }
 
-export const verifyToken = (
+export const generateJWTRefreshToken = async (userId: ObjectId) => {
+  const refreshToken = await jwt.sign(
+                          { '_id': userId },
+                          process.env.REFRESH_TOKEN_SECRET,
+                      );
+
+  return refreshToken;
+}
+
+export const verifyTokenByAccessTokenSecret = (
     token: string,
     callback: (err: any, user: { _id: string }) => void
   ) => {
