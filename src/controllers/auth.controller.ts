@@ -73,15 +73,15 @@ export class AuthController {
                  if (!user) {
                      res.status(500).json({ message: 'bad email, try again' });
                  } else {
-                     const match = bcrypt.compare(req.body.password, user.password);
+                    const match = await bcrypt.compare(req.body.password, user.password);
                      
-                     if (!match) {
+                    if (!match) {
                         res.status(500).send('wrong email or password');
-                     } else {
+                    } else {
                         const accessToken = await generateJWT(user._id);
 
                         res.status(200).send({ 'accessToken': accessToken });
-                     }
+                    }
                  }
              }
          } catch (err) {
