@@ -38,9 +38,11 @@ export class CommentController {
 
     createComment = async (req: Request, res: Response) => {
         try {
-            const newComment = await this.model.create(req.body);
+          const comment: IComment = new Comment({ ...req.body });
+      
+          const savedComment = await comment.save();
 
-            res.status(200).send(newComment);
+            res.status(200).send(savedComment);
         } catch (err) {
             res.status(500).json({ message: err.message });
         }
@@ -90,9 +92,10 @@ export class CommentController {
         const deletedComment = await this.model.findByIdAndDelete(commentId);
         if (!deletedComment) {
           res.status(404).json({ error: "Comment not found" });
+        } else {
+          res.status(200).json({ message: "Comment deleted successfully" });
         }
     
-        res.status(200).json({ message: "Comment deleted successfully" });
       } catch (error) {
         res.status(500).json({ error: "Internal Server Error" });
       }
