@@ -108,7 +108,7 @@ describe("CommentController", () => {
 
       commentId2 = response.body._id;
     });
-    
+
     it("should return 401 when adding comment without authentication", async () => {
       const content = {
         message: "This comment should not be added.",
@@ -206,6 +206,6 @@ describe("CommentController", () => {
       expect(response.status).toBe(500);
 
       expect(response.body).toHaveProperty("error", "Internal Server Error");
-    }, 100000);
+    });
   });
 });
