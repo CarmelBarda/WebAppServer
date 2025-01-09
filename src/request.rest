@@ -82,3 +82,12 @@ Content-Type: application/json
     "email": "aya.colman@ac.il",
     "password": "1234"
 }
+
+### Logout
+POST http://localhost:3000/api/auth/logout
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkxNWI5ZDE1MTY0NWE1OWIiLCJpYXQiOjE3MzU5OTc3MjF9._6IKmrZaj5bGlcX_k0YmqfKF7Dl-0A9ygiEUhFQnC5A
+
+
+### refresh token
+POST http://localhost:3000/api/auth/refreshToken
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkxNWI5ZDE1MTY0NWE1OWIiLCJpYXQiOjE3MzU5OTU3MDd9.GlaS80SW69OAxpLnQTvGhnXXZ3DLChvwWdS2tc4sElY
