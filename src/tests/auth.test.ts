@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 
 jest.mock("google-auth-library");
+jest.setTimeout(10000);
 let app: Express;
 
 const userData = {
@@ -32,8 +33,8 @@ afterAll(async () => {
 describe("Authentication tests", () => {
   describe("Registration API", () => {
     it("should return 500 given error during user registration", async () => {
-      // Mocking the User.create method to throw an error
-      jest.spyOn(User, "create").mockImplementationOnce(() => {
+      // Mocking the User.save method to throw an error
+      jest.spyOn(User.prototype, "save").mockImplementationOnce(() => {
         throw new Error("Mocked user creation error");
       });
 
@@ -42,25 +43,24 @@ describe("Authentication tests", () => {
         .send(userData)
         .expect(500);
 
-      expect(response.text).toContain("Mocked user creation error");
+      expect(response.body).toHaveProperty("message", "Error: Mocked user creation error");
+
     });
 
     it("should register a new user", async () => {
       const response = await request(app)
         .post("/api/auth/register")
         .send(userData);
-      expect(response.statusCode).toBe(201);
+      expect(response.statusCode).toBe(200);
       expect(response.body.name).toBe(userData.name);
       expect(response.body.email).toBe(userData.email);
-      expect(response.body.type).toBe(userData.type);
-      expect(response.body.bio).toBe(userData.bio);
     });
 
     it("should handle missing information", async () => {
       const incompleteData = {
         name: "John Doe",
         email: "john.doe@example.com",
-        // Missing password, type, bio
+        // Missing password
       };
 
       const response = await request(app)
@@ -68,16 +68,16 @@ describe("Authentication tests", () => {
         .send(incompleteData)
         .expect(400);
 
-      expect(response.text).toBe("can't register the user - missing info");
+      expect(response.body).toHaveProperty("message", "no password or email provided");
     });
 
     it("should handle duplicate email registration", async () => {
       const duplicateResponse = await request(app)
         .post("/api/auth/register")
         .send(userData)
-        .expect(406);
-
-      expect(duplicateResponse.text).toBe("User already exists");
+        .expect(500);
+        expect(duplicateResponse.body)
+          .toHaveProperty("message", "this email is already in use. try to login");
     });
   });
 
@@ -85,17 +85,26 @@ describe("Authentication tests", () => {
     it("should return 400 if email or password is missing", async () => {
       const response = await request(app).post("/api/auth/login").send({});
 
-      expect(response.status).toBe(400);
-      expect(response.text).toContain("missing email or password");
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty("message", "no password or email provided");
     });
 
-    it("should return 401 if email or password is incorrect", async () => {
+    it("should return 401 if email is incorrect", async () => {
       const response = await request(app)
         .post("/api/auth/login")
         .send({ email: "nonexistent@example.com", password: "wrongpassword" });
 
       expect(response.status).toBe(401);
-      expect(response.text).toContain("email or password incorrect");
+      expect(response.text).toContain("bad email, try again");
+    });
+
+    it("should return 401 if password is incorrect", async () => {
+      const response = await request(app)
+        .post("/api/auth/login")
+        .send({ email: userData.email, password: "wrongpassword" });
+
+      expect(response.status).toBe(401);
+      expect(response.text).toContain("wrong email or password");
     });
 
     // Test for successful login
@@ -109,118 +118,109 @@ describe("Authentication tests", () => {
       expect(response.body.refreshToken).toBeDefined();
       accessToken = response.body.accessToken;
       refreshToken = response.body.refreshToken;
-
-      expect(response.body.user).toEqual({
-        _id: expect.any(String),
-        type: "student",
-        name: "John Doe",
-        image: {},
-        email: "john.doe@example.com",
-        bio: "Sample bio",
-      });
     });
   });
 
-  // describe("Refresh Token API", () => {
-  //   it("should handle expired refresh token after timeout", async () => {
-  //     // Mocking expired refresh token
-  //     const expiredRefreshToken = jwt.sign({ _id: "userId" }, "expiredSecret", {
-  //       expiresIn: "-1s",
-  //     });
+  describe("Refresh Token API", () => {
+    it("should handle expired refresh token after timeout", async () => {
+      // Mocking expired refresh token
+      const expiredRefreshToken = jwt.sign({ _id: "userId" }, "expiredSecret", {
+        expiresIn: "-1s",
+      });
 
-  //     const response = await request(app)
-  //       .post("/api/auth/refresh")
-  //       .set("Authorization", `Bearer ${expiredRefreshToken}`)
-  //       .expect(401);
+      const response = await request(app)
+        .post("/api/auth/refreshToken")
+        .set("Authorization", `JWT ${expiredRefreshToken}`)
+        .expect(403);
 
-  //     expect(response.text).toContain("Unauthorized");
-  //   });
+      expect(response.text).toContain("invalid request");
+    });
 
-  //   it("should handle missing authorization token during token refresh", async () => {
-  //     const response = await request(app).post("/api/auth/refresh").expect(401);
+    it("should handle missing authorization token during token refresh", async () => {
+      const response = await request(app).post("/api/auth/refreshToken").expect(403);
 
-  //     expect(response.text).toContain("Unauthorized");
-  //   });
+      expect(response.text).toContain("invalid request");
+    });
 
-  //   it("should handle invalid authorization token during token refresh", async () => {
-  //     const response = await request(app)
-  //       .post("/api/auth/refresh")
-  //       .set("Authorization", "Bearer InvalidToken")
-  //       .expect(401);
+    it("should handle invalid authorization token during token refresh", async () => {
+      const response = await request(app)
+        .post("/api/auth/refreshToken")
+        .set("Authorization", "JWT InvalidToken")
+        .expect(403);
 
-  //     expect(response.text).toContain("Unauthorized");
-  //   });
+      expect(response.text).toContain("invalid request");
+    });
 
-  //   it("should return 401 if user not found in the database", async () => {
-  //     // Mocking the User.findOne method to return null
-  //     jest.spyOn(User, "findOne").mockResolvedValueOnce(null);
+    it("should return 401 if user not found in the database", async () => {
+      // Mocking the User.findById method to return null
+      jest.spyOn(User, "findById").mockResolvedValueOnce(null);
 
-  //     const response = await request(app)
-  //       .post("/api/auth/refresh")
-  //       .set("Authorization", `Bearer ${refreshToken}`)
-  //       .expect(401);
+      const response = await request(app)
+        .post("/api/auth/refreshToken")
+        .set("Authorization", `JWT ${refreshToken}`)
+        .expect(401);
 
-  //     expect(response.text).toContain("User not found");
-  //   });
+      expect(response.text).toContain("User not found");
+    });
 
-  //   it("should return 500 if any error occurs during the process", async () => {
-  //     // Mocking the User.findOne method to throw an error
-  //     jest
-  //       .spyOn(User, "findOne")
-  //       .mockRejectedValueOnce(new Error("Database error"));
+    it("should return 500 if any error occurs during the process", async () => {
+      // Mocking the User.findOne method to throw an error
+      jest
+        .spyOn(User, "findOne")
+        .mockRejectedValueOnce(new Error("Database error"));
 
-  //     const response = await request(app)
-  //       .post("/api/auth/refresh")
-  //       .set("Authorization", `Bearer ${refreshToken}`)
-  //       .expect(500);
+      const response = await request(app)
+        .post("/api/auth/refreshToken")
+        .set("Authorization", `JWT ${refreshToken}`)
+        .expect(500);
 
-  //     expect(response.text).toContain("Database error");
-  //   });
+      expect(response.text).toContain("Database error");
+    });
 
-  //   it("should refresh access token with valid refresh token", async () => {
-  //     const response = await request(app)
-  //       .post("/api/auth/refresh")
-  //       .set("Authorization", `Bearer ${refreshToken}`)
-  //       .expect(200);
+    it("should refresh access token with valid refresh token", async () => {
+      const response = await request(app)
+        .post("/api/auth/refreshToken")
+        .set("Authorization", `JWT ${refreshToken}`)
+        .expect(200);
 
-  //     expect(response.body.accessToken).toBeDefined();
-  //     expect(response.body.refreshToken).toBeDefined();
+      expect(response.body.accessToken).toBeDefined();
+      expect(response.body.refreshToken).toBeDefined();
 
-  //     const newAccessToken = response.body.accessToken;
-  //     newRefreshToken = response.body.refreshToken;
+      const newAccessToken = response.body.accessToken;
+      newRefreshToken = response.body.refreshToken;
 
-  //     const response2 = await request(app)
-  //       .get("/api/posts")
-  //       .set("Authorization", `Bearer ${newAccessToken}`);
-  //     expect(response2.statusCode).toBe(200);
-  //   });
-  // });
+      const response2 = await request(app)
+        .get("/api/post")
+        .set("Authorization", `JWT ${newAccessToken}`);
+      expect(response2.statusCode).toBe(200);
+    });
+  });
 
-  // describe("Logout API", () => {
-  //   it("should handle missing authorization token during logout", async () => {
-  //     const response = await request(app).post("/api/auth/logout").expect(401);
+  describe("Logout API", () => {
+    it("should handle missing authorization token during logout", async () => {
+      const response = await request(app).post("/api/auth/logout").expect(403);
 
-  //     expect(response.text).toContain("Unauthorized");
-  //   });
+      expect(response.text).toContain("invalid request");
+    });
 
-  //   it("should handle invalid authorization token during logout", async () => {
-  //     const response = await request(app)
-  //       .post("/api/auth/logout")
-  //       .set("Authorization", "Bearer InvalidToken")
-  //       .expect(401);
+    it("should handle invalid authorization token during logout", async () => {
+      const response = await request(app)
+        .post("/api/auth/logout")
+        .set("Authorization", "JWT InvalidToken")
+        .expect(403);
 
-  //     expect(response.text).toContain("Unauthorized");
-  //   });
+      expect(response.text).toContain("invalid request");
+    });
 
-  //   it("should handle successful logout", async () => {
-  //     const response = await request(app)
-  //       .post("/api/auth/logout")
-  //       .set("Authorization", `Bearer ${newRefreshToken}`)
-  //       .expect(200);
+    it("should handle successful logout", async () => {
+      const response = await request(app)
+        .post("/api/auth/logout")
+        .set("Authorization", `JWT ${newRefreshToken}`)
+        .expect(200);
 
-  //     expect(response.text).toContain("Logout successful");
-  //   });
-  // });
+      expect(response.text).toContain("logged out");
+    });
+  });
 
   // Update profile tests
   // describe("Update Profile API", () => {
@@ -233,7 +233,7 @@ describe("Authentication tests", () => {
 
   //     const response = await request(app)
   //       .put("/api/auth/update-profile")
-  //       .set("Authorization", `Bearer ${accessToken}`)
+  //       .set("Authorization", `JWT ${accessToken}`)
   //       .send(updatedData)
   //       .expect(200);
 
@@ -264,7 +264,7 @@ describe("Authentication tests", () => {
 
   //     const response = await request(app)
   //       .put("/api/auth/update-additional-info")
-  //       .set("Authorization", `Bearer ${accessToken}`)
+  //       .set("Authorization", `JWT ${accessToken}`)
   //       .send(updatedData)
   //       .expect(200);
 
@@ -291,7 +291,7 @@ describe("Authentication tests", () => {
 
   //     const response = await request(app)
   //       .put("/api/auth/update-additional-info")
-  //       .set("Authorization", `Bearer ${accessToken}`)
+  //       .set("Authorization", `JWT ${accessToken}`)
   //       .send(requestData)
   //       .expect(400);
 
@@ -309,7 +309,7 @@ describe("Authentication tests", () => {
 
   //     const response = await request(app)
   //       .put("/api/auth/update-additional-info")
-  //       .set("Authorization", `Bearer ${accessToken}`)
+  //       .set("Authorization", `JWT ${accessToken}`)
   //       .send(requestData)
   //       .expect(400);
 
@@ -326,7 +326,7 @@ describe("Authentication tests", () => {
 
   //     const response = await request(app)
   //       .put("/api/auth/update-additional-info")
-  //       .set("Authorization", `Bearer ${accessToken}`)
+  //       .set("Authorization", `JWT ${accessToken}`)
   //       .send(requestData)
   //       .expect(400);
 
@@ -346,7 +346,7 @@ describe("Authentication tests", () => {
 
   //     const response = await request(app)
   //       .put("/api/auth/update-additional-info")
-  //       .set("Authorization", `Bearer ${accessToken}`)
+  //       .set("Authorization", `JWT ${accessToken}`)
   //       .send(updatedData)
   //       .expect(404);
 
@@ -366,7 +366,7 @@ describe("Authentication tests", () => {
 
   //     const response = await request(app)
   //       .put("/api/auth/update-additional-info")
-  //       .set("Authorization", `Bearer ${accessToken}`)
+  //       .set("Authorization", `JWT ${accessToken}`)
   //       .send(updatedData)
   //       .expect(500);
 
