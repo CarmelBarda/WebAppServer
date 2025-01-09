@@ -9,7 +9,7 @@ const authMiddleware = (req, res, next: NextFunction) => {
     return res.sendStatus(401);
   }
 
-  verifyToken(token, (err: any, user: { _id: string }) => {
+  verifyToken(token, process.env.JWT_SECRET, (err: any, user: { _id: string }) => {
     if (err) return res.sendStatus(401);
 
     req.user = user as { _id: string };

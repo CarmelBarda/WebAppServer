@@ -2,7 +2,8 @@ import { Model } from "mongoose";
 import { Request, Response } from "express";
 import { User } from "../models/models";
 import { IUser } from "../models/interfaces/IUser";
-import { encryptPassword, generateJWT } from "../commons/utils/auth";
+import jwt from "jsonwebtoken";
+import { encryptPassword, generateJWTAccessToken, generateJWTRefreshToken, verifyToken } from "../commons/utils/auth";
 
 const bcrypt = require('bcrypt');
 
@@ -78,15 +79,98 @@ export class AuthController {
                     if (!match) {
                         res.status(500).send('wrong email or password');
                     } else {
-                        const accessToken = await generateJWT(user._id);
+                        const accessToken = await generateJWTAccessToken(user._id);
+                        const refreshToken = await generateJWTRefreshToken(user._id);
 
-                        res.status(200).send({ 'accessToken': accessToken });
+                        if(user.tokens == null) user.tokens = [refreshToken];
+                        else user.tokens.push(refreshToken);
+
+                        await user.save();
+
+                        res.status(200).send({ 
+                            'accessToken': accessToken,
+                            'refreshToken': refreshToken
+                        });
                     }
                  }
              }
          } catch (err) {
              res.status(500).json({ message: err.message });
          }
+    }
+
+    refreshToken = async (req: Request, res: Response) => {
+        const authHeaders = req.headers['authorization'];
+        const token = authHeaders && authHeaders.split(' ')[1];
+        if (token === null) {
+            res.sendStatus(401).json({ message: 'no token provided' });
+        } else {
+            verifyToken(token, process.env.REFRESH_TOKEN_SECRET, async (err: any, user: { _id : string}) => {
+                if(err) res.status(403).send(err.message);
+                else {
+                    const userId = user._id;
+                    try {
+                        const user = await this.model.findById(userId);
+        
+                        if (!user) {
+                            res.status(403).send({ message: 'invalid request' });
+                        } else if (!user.tokens.includes(token)) {
+                            user.tokens = [];
+                            await user.save();
+                            res.status(403).send({ message: 'invalid request' });
+                        } else {
+                            const accessToken = await generateJWTAccessToken(userId);
+                            const refreshToken = await generateJWTRefreshToken(userId);
+        
+                            user.tokens[user.tokens.indexOf(token)] = refreshToken;
+                            await user.save();
+                            res.status(200).send({ 
+                                'accessToken': accessToken, 
+                                'refreshToken': refreshToken 
+                            });
+                        }
+                    } catch (err) {
+                        res.status(403).json({ message: err.message });
+                    }
+                }
+                
+            });
+        }  
+    }
+
+    logout = async (req: Request, res: Response) => {
+        const authHeaders = req.headers['authorization'];
+        const token = authHeaders && authHeaders.split(' ')[1];
+        if (token === null) {
+            res.sendStatus(401).json({message: 'no token provided'});
+        } else {
+            jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, async (err: any, user: IUser) => {
+                if(err) {
+                    res.status(403).json({ message: err.message });
+                } else {
+                    const userId = user._id;
+
+                    try {
+                        const user = await this.model.findById(userId);
+        
+                        if (!user) {
+                            res.status(403).json('invalid request');
+                        } else if (!user.tokens.includes(token)) {
+                            user.tokens = [];
+                            await user.save();
+                            res.status(403).json({ message: 'invalid request' });
+                        } else {
+                            user.tokens.splice(user.tokens.indexOf(token), 1);
+                            await user.save();
+                            res.status(200).json({ message: 'logged out' });
+                        }
+                    } catch (err) {
+                        res.status(403).json({ message: err.message });
+                    } 
+                }
+
+            });
+        }   
     }
 };
 
