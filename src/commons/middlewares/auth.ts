@@ -1,5 +1,5 @@
 import { NextFunction } from "express";
-import { verifyTokenByAccessTokenSecret } from "../utils/auth";
+import { verifyToken } from "../utils/auth";
 
 const authMiddleware = (req, res, next: NextFunction) => {
   const authHeader: string = req.headers["authorization"];
@@ -9,7 +9,7 @@ const authMiddleware = (req, res, next: NextFunction) => {
     return res.sendStatus(401);
   }
 
-  verifyTokenByAccessTokenSecret(token, (err: any, user: { _id: string }) => {
+  verifyToken(token, process.env.JWT_SECRET, (err: any, user: { _id: string }) => {
     if (err) return res.sendStatus(401);
 
     req.user = user as { _id: string };

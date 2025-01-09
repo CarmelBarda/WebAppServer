@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { User } from "../models/models";
 import { IUser } from "../models/interfaces/IUser";
 import jwt from "jsonwebtoken";
-import { encryptPassword, generateJWTAccessToken, generateJWTRefreshToken } from "../commons/utils/auth";
+import { encryptPassword, generateJWTAccessToken, generateJWTRefreshToken, verifyToken } from "../commons/utils/auth";
 
 const bcrypt = require('bcrypt');
 
@@ -105,7 +105,7 @@ export class AuthController {
         if (token === null) {
             res.sendStatus(401).json({ message: 'no token provided' });
         } else {
-            jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, async (err: any, user: IUser) => {
+            verifyToken(token, process.env.REFRESH_TOKEN_SECRET, async (err: any, user: { _id : string}) => {
                 if(err) res.status(403).send(err.message);
                 else {
                     const userId = user._id;

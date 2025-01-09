@@ -29,9 +29,10 @@ export const generateJWTRefreshToken = async (userId: ObjectId) => {
   return refreshToken;
 }
 
-export const verifyTokenByAccessTokenSecret = (
+export const verifyToken = (
     token: string,
-    callback: (err: any, user: { _id: string }) => void
+    secret: string,
+    callback: (err: any, user: { _id: string }) => any
   ) => {
-    jwt.verify(token, process.env.JWT_SECRET, callback);
+    jwt.verify(token, secret, callback);
   };
