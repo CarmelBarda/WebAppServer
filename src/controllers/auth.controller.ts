@@ -105,7 +105,7 @@ export class AuthController {
         if (token === null) {
             res.sendStatus(401).json({ message: 'no token provided' });
         } else {
-            verifyToken(token, process.env.REFRESH_TOKEN_SECRET, async (err: any, user: { _id : string}) => {
+            verifyToken(token, process.env.REFRESH_TOKEN_SECRET, async (err: any, user: { _id: string}) => {
                 if(err) res.status(403).send(err.message);
                 else {
                     const userId = user._id;
@@ -119,8 +119,8 @@ export class AuthController {
                             await user.save();
                             res.status(403).send({ message: 'invalid request' });
                         } else {
-                            const accessToken = await generateJWTAccessToken(userId);
-                            const refreshToken = await generateJWTRefreshToken(userId);
+                            const accessToken = await generateJWTAccessToken(user._id);
+                            const refreshToken = await generateJWTRefreshToken(user._id);
         
                             user.tokens[user.tokens.indexOf(token)] = refreshToken;
                             await user.save();
