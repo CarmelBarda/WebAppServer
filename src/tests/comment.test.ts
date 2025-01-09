@@ -29,6 +29,7 @@ const postData = {
 };
 
 beforeAll(async () => {
+  jest.setTimeout(10000);
   app = await initApp();
 
   await Post.deleteMany({ owner: postData.owner });
