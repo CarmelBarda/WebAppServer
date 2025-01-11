@@ -18,7 +18,7 @@ const userData = {
   name: "John Doe",
   email: "john.doe@example.com",
   password: "password123",
-  // refreshTokens: [],
+  refreshTokens: [],
 };
 
 const postData = {
