@@ -226,6 +226,35 @@ describe("CommentController", () => {
     });
   });
 
+  describe("getPostComments", () => { 
+    it("should get all comments for a post", async () => {
+      const response = await request(app)
+        .get(`/api/comment?post=${postId}`)
+        .set("Authorization", `JWT ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toHaveLength(2);
+    });
+
+    it("should return 401 when getting comments without authentication", async () => {
+      await request(app).get(`/api/comment?post=${postId}`).expect(401);
+    });
+
+    it("should return 500 when encountering internal server error while getting comments", async () => {
+      jest.spyOn(Comment, "aggregate").mockImplementationOnce(() => {
+        throw new Error("Internal Server Error");
+      });
+
+      const response = await request(app)
+        .get(`/api/comment?post=${postId}`)
+        .set("Authorization", `JWT ${accessToken}`)
+        
+      expect(response.status).toBe(500);
+
+      expect(response.body).toHaveProperty("message", "Internal Server Error");
+    });
+  });
+
   describe("deleteComment", () => {
     it("should delete an existing comment", async () => {
       const response = await request(app)
