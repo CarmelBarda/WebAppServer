@@ -5,7 +5,7 @@ const authMiddleware = (req, res, next: NextFunction) => {
   const authHeader: string = req.headers["authorization"];
   const token: string = authHeader && authHeader.split(" ")[1];
 
-  if (token == null) {
+  if (token === null || token === undefined) {
     return res.sendStatus(401);
   }
 

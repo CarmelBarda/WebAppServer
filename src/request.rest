@@ -39,6 +39,7 @@ GET http://localhost:3000/api/comment/6766baf03a9f5c7b26fc0aef
 ### Create comment
 POST http://localhost:3000/api/comment
 Content-Type: application/json
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkxNWI5ZDE1MTY0NWE1OWIiLCJpYXQiOjE3MzYxNTYyODIsImV4cCI6MTczNjE2MzQ4Mn0.mTrE2wFTzUQSbo3IFzNYtKcf6rQvLIIJMvwPhYlYMLQ
 
 {
     "message": "amazinggg!!",
