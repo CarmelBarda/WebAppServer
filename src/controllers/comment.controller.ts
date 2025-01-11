@@ -17,23 +17,32 @@ export class CommentController {
     }
 
     getAllComments = async (_: Request, res: Response) => {
+      try {
         const allcomments = await this.getCommentsByFilter({});
       
         res.status(200).send(allcomments);
+      } catch (err) {
+        res.status(500).json({ message: err.message });
+      }
+        
     }
 
     getCommentById = async (req: Request, res: Response) => {
-      const commentId = req.params.id;
+      try {
+        const commentId = req.params.id;
 
-      if (!mongoose.Types.ObjectId.isValid(commentId)) {
-          res.status(400).send({ error: "comment id isn't valid" });
+        if (!mongoose.Types.ObjectId.isValid(commentId)) {
+            res.status(400).send({ error: "comment id isn't valid" });
+        }
+
+        const comment = await this.getCommentsByFilter({ 
+            _id: new mongoose.Types.ObjectId(commentId) 
+        });
+
+        res.status(200).send(comment[0]);
+      } catch (err) {
+        res.status(500).json({ message: err.message });
       }
-
-      const comment = await this.getCommentsByFilter({ 
-          _id: new mongoose.Types.ObjectId(commentId) 
-      });
-
-      res.status(200).send(comment[0]);
     }
 
     createComment = async (req: Request, res: Response) => {

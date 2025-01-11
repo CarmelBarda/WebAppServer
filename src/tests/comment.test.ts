@@ -28,8 +28,9 @@ const postData = {
   content: "This is a test post."
 };
 
+jest.setTimeout(10000);
+
 beforeAll(async () => {
-  jest.setTimeout(10000);
   app = await initApp();
 
   await Post.deleteMany({ owner: postData.owner });
@@ -65,6 +66,7 @@ beforeAll(async () => {
 afterAll(async () => {
   await Post.findByIdAndDelete(postId);
   await Comment.findByIdAndDelete(commentId);
+  await Comment.findByIdAndDelete(commentId2);
 
   // Close the MongoDB connection
   await mongoose.connection.close();
@@ -146,6 +148,52 @@ describe("CommentController", () => {
       expect(response.status).toBe(500);
 
       expect(response.body).toHaveProperty("message", "Internal Server Error");
+    });
+  });
+
+  describe("getCommentById", () => { 
+    it("should get a comment by id", async () => {
+      const response = await request(app)
+        .get(`/api/comment/${commentId}`)
+        .set("Authorization", `JWT ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toHaveProperty("_id");
+      expect(response.body.message).toBe("This is a test comment.");
+      expect(response.body.postId).toBe(postId);
+    });
+
+    it("should return 401 when getting comment by id without authentication", async () => {
+      await request(app).get(`/api/comment/${commentId}`).expect(401);
+    });
+
+    it("should return 500 when encountering internal server error while getting comment by id", async () => {
+      jest.spyOn(Comment, "aggregate").mockImplementationOnce(() => {
+        throw new Error("Internal Server Error");
+      });
+
+      const response = await request(app)
+        .get(`/api/comment/${commentId}`)
+        .set("Authorization", `JWT ${accessToken}`)
+        
+      expect(response.status).toBe(500);
+
+      expect(response.body).toHaveProperty("message", "Internal Server Error");
+    });
+  });
+
+  describe("getComments", () => {
+    it("should get all comments", async () => {
+      const response = await request(app)
+        .get(`/api/comment`)
+        .set("Authorization", `JWT ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toHaveLength(46);
+    });
+
+    it("should return 401 when getting comments without authentication", async () => {
+      await request(app).get(`/api/comment`).expect(401);
     });
   });
 
