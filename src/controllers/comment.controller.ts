@@ -59,10 +59,6 @@ export class CommentController {
             { new: true }
           );
 
-          if (!updatedComment) {
-            res.status(404).json({ error: `Comment ${commentId} not found` });
-          } 
-
           res.status(200).send(updatedComment);  
 
         } catch (err) {

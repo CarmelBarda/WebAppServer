@@ -149,6 +149,83 @@ describe("CommentController", () => {
     });
   });
 
+  describe("updateComment", () => {
+    it("should update a comment", async () => {
+      const content = {
+        message: "This is a test comment.",
+        userId: userData._id,
+        postId: postData._id
+      };
+
+      const response = await request(app)
+        .put(`/api/comment/${commentId}`)
+        .send(content)
+        .set("Authorization", `JWT ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toHaveProperty("_id");
+      expect(response.body.message).toBe(content.message);
+      expect(response.body.postId).toBe(postId);
+    });
+
+    it("should return 401 when updating comment without authentication", async () => {
+      const content = {
+        message: "This comment should not be added.",
+        userId: userData._id,
+        postId: postData._id
+      };
+
+       const response = await request(app)
+        .put(`/api/comment/${commentId}`)
+        .send(content)
+
+
+        expect(response.status).toBe(401);
+    });
+
+    it("should return 500 when encountering internal server error while adding comment", async () => {
+      // Mocking the CommentModel constructor to throw an error when called
+      jest.spyOn(Comment, "findByIdAndUpdate").mockImplementation(() => {
+        throw new Error("Internal Server Error");
+      });
+
+      const content = {
+        message: "This is a test comment.",
+        userId: userData._id,
+        postId: postData._id
+      };
+
+      const response = await request(app)
+        .put(`/api/comment/${commentId}`)
+        .send(content)
+        .set("Authorization", `JWT ${accessToken}`)
+        
+        
+      expect(response.status).toBe(500);
+
+      expect(response.body).toHaveProperty("message", "Internal Server Error");
+    });
+
+    it("should return 500 when trying to update a non existing comment", async () => {
+
+      const content = {
+        message: "This is a test comment.",
+        userId: userData._id,
+        postId: postData._id
+      };
+
+      const response = await request(app)
+        .put(`/api/comment/non-existing-comment-id`)
+        .send(content)
+        .set("Authorization", `JWT ${accessToken}`)
+        
+        
+      expect(response.status).toBe(500);
+
+      expect(response.body).toHaveProperty("message", "Internal Server Error");
+    });
+  });
+
   describe("deleteComment", () => {
     it("should delete an existing comment", async () => {
       const response = await request(app)
