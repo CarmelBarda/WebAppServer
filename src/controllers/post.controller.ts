@@ -27,13 +27,13 @@ export class PostController {
 
       if (!mongoose.Types.ObjectId.isValid(postId)) {
           res.status(400).send({ error: "post id isn't valid" });
-      }
-
-      const post = await this.getPostsByFilter({ 
+      } else {
+        const post = await this.getPostsByFilter({ 
           _id: new mongoose.Types.ObjectId(postId) 
-      });
+        });
 
-      res.status(200).send(post[0]);
+        res.status(200).send(post[0]);
+      }
     }
 
     createPost = async (req: Request, res: Response) => {
@@ -42,7 +42,7 @@ export class PostController {
 
           res.status(200).send(newPost);
         } catch (err) {
-          res.status(500).json({ message: err.message });
+          res.status(500).json({ message: "Internal Server Error" });
         }
     }
 
@@ -63,19 +63,19 @@ export class PostController {
     updatePost = async (req: Request, res: Response) => {
         try {
           const postId = req.params.id;
-          const updatedPostFIelds = req.body;
+          const updatedPostFields = req.body;
 
           const updatedPost = await this.model.findByIdAndUpdate(
             postId,
-            { $set: updatedPostFIelds },
+            { $set: updatedPostFields },
             { new: true }
           );
 
           if (!updatedPost) {
             res.status(404).json({ error: `Post ${postId} not found` });
-          } 
-            
-          res.status(200).send(updatedPost);  
+          } else {
+            res.status(200).send(updatedPost);  
+          }
 
         } catch (err) {
           res.status(500).json({ message: err.message });
