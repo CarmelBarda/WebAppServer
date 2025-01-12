@@ -18,7 +18,7 @@ export class AuthController {
         const password: string | null = userDetails.password;
         const email: string | null = userDetails.email;
 
-        const isValidUser: boolean = password !== null && !email !== null;
+        const isValidUser: boolean = !!password && !!email;
 
         return isValidUser;
     }
@@ -37,13 +37,14 @@ export class AuthController {
             return newUser;
         } catch (err) {
             console.log('failed to create user', err);
+            throw new Error(err);
         }
     }
 
     register = async (req: Request, res: Response) => {
         try {
            if (!this.#isUserValid(req.body)) {
-                res.status(500).json({ message: 'no password or email provided' });
+                res.status(400).json({ message: 'no password or email provided' });
             } else {
                 const user = await this.model.findOne({
                     email: req.body.email
@@ -72,12 +73,12 @@ export class AuthController {
                  });
  
                  if (!user) {
-                     res.status(500).json({ message: 'bad email, try again' });
+                     res.status(401).json({ message: 'bad email, try again' });
                  } else {
                     const match = await bcrypt.compare(req.body.password, user.password);
                      
                     if (!match) {
-                        res.status(500).send('wrong email or password');
+                        res.status(401).send('wrong email or password');
                     } else {
                         const accessToken = await generateJWTAccessToken(user._id);
                         const refreshToken = await generateJWTRefreshToken(user._id);
@@ -106,14 +107,14 @@ export class AuthController {
             res.sendStatus(401).json({ message: 'no token provided' });
         } else {
             verifyToken(token, process.env.REFRESH_TOKEN_SECRET, async (err: any, user: { _id: string}) => {
-                if(err) res.status(403).send(err.message);
+                if(err) res.status(403).send('invalid request');
                 else {
                     const userId = user._id;
                     try {
                         const user = await this.model.findById(userId);
         
                         if (!user) {
-                            res.status(403).send({ message: 'invalid request' });
+                            res.status(401).send({ message: 'User not found' });
                         } else if (!user.tokens.includes(token)) {
                             user.tokens = [];
                             await user.save();
@@ -130,7 +131,7 @@ export class AuthController {
                             });
                         }
                     } catch (err) {
-                        res.status(403).json({ message: err.message });
+                        res.status(500).json({ message: err.message });
                     }
                 }
                 
@@ -146,7 +147,7 @@ export class AuthController {
         } else {
             jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, async (err: any, user: IUser) => {
                 if(err) {
-                    res.status(403).json({ message: err.message });
+                    res.status(403).json({ message: 'invalid request' });
                 } else {
                     const userId = user._id;
 
