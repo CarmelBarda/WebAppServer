@@ -197,6 +197,20 @@ describe("CommentController", () => {
     it("should return 401 when getting comments without authentication", async () => {
       await request(app).get(`/api/comment`).expect(401);
     });
+
+    it("should return 500 when encountering internal server error while getting all comments", async () => {
+      jest.spyOn(Comment, "aggregate").mockImplementationOnce(() => {
+        throw new Error("Internal Server Error");
+      });
+
+      const response = await request(app)
+        .get(`/api/comment`)
+        .set("Authorization", `JWT ${accessToken}`)
+        
+      expect(response.status).toBe(500);
+
+      expect(response.body).toHaveProperty("message", "Internal Server Error");
+    });
   });
 
   describe("updateComment", () => {
@@ -231,6 +245,22 @@ describe("CommentController", () => {
 
 
         expect(response.status).toBe(401);
+    });
+
+    it("should return 404 when updating a non-existing comment", async () => {
+          const nonExistingCommentId = generateObjectId();
+    
+          const updateData = {
+            message: "This is an updated test comment.",
+          };
+    
+          const response = await request(app)
+            .put(`/api/comment/${nonExistingCommentId}`)
+            .send(updateData)
+            .set("Authorization", `JWT ${accessToken}`)
+            .expect(404);
+    
+          expect(response.body).toHaveProperty("error", `Comment ${nonExistingCommentId} not found`);
     });
 
     it("should return 500 when encountering internal server error while adding comment", async () => {

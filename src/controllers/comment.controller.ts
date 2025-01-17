@@ -33,13 +33,13 @@ export class CommentController {
 
         if (!mongoose.Types.ObjectId.isValid(commentId)) {
             res.status(400).send({ error: "comment id isn't valid" });
-        }
-
-        const comment = await this.getCommentsByFilter({ 
+        } else {
+          const comment = await this.getCommentsByFilter({ 
             _id: new mongoose.Types.ObjectId(commentId) 
-        });
+          });
 
-        res.status(200).send(comment[0]);
+          res.status(200).send(comment[0]);
+        }
       } catch (err) {
         res.status(500).json({ message: err.message });
       }
@@ -68,7 +68,11 @@ export class CommentController {
             { new: true }
           );
 
-          res.status(200).send(updatedComment);  
+          if (!updatedComment) {
+            res.status(404).json({ error: `Comment ${commentId} not found` });
+          } else {
+            res.status(200).send(updatedComment);  
+          }
 
         } catch (err) {
           res.status(500).json({ message: err.message });
