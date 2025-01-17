@@ -41,15 +41,8 @@ const router = express.Router();
  *           type: string
  *           description: post's content
  *         image:
- *           type: object
- *           properties:
- *             originalName:
- *               type: string
- *               description: original name of the image file
- *             serverFilename:
- *               type: string
- *               description: URL of the post image on the server
- *           description: post's image object
+ *           type: string
+ *           description: post's image name
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -68,15 +61,8 @@ const router = express.Router();
  *           type: string
  *           description: post's content
  *         image:
- *           type: object
- *           properties:
- *             originalName:
- *               type: string
- *               description: original name of the image file
- *             serverFilename:
- *               type: string
- *               description: URL of the post image on the server
- *           description: post's image object
+ *           type: string
+ *           description: post's image name
  *
  *     PostUpdateRequest:
  *       type: object
@@ -88,15 +74,8 @@ const router = express.Router();
  *           type: string
  *           description: updated content of the post
  *         image:
- *           type: object
- *           properties:
- *             originalName:
- *               type: string
- *               description: original name of the image file
- *             serverFilename:
- *               type: string
- *               description: URL of the post image on the server
- *           description: post's image object
+ *           type: string
+ *           description: post's image name
  */
 
 /**
@@ -181,9 +160,7 @@ router.get('/', authMiddleware, (req, res) => {
  *             title: "Random title"
  *             content: "Content for the post"
  *             owner: "675016b349f76c9c0a7ab99a"
- *             image: {
- *               "originalName": "RandomImage.jpg",
- *             }
+ *             image: "RandomImage.jpg"
  *     responses:
  *       200:
  *         description: The created post
@@ -220,9 +197,7 @@ router.post('/', authMiddleware, postController.createPost);
  *           example:
  *             title: "Updated title"
  *             content: "Updated content!"
- *             image: {
- *               "originalName": "RandomImage.jpg",
- *             }
+ *             image: "RandomImage.jpg"
  *     responses:
  *       200:
  *         description: The updated post
