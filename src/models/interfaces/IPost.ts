@@ -5,4 +5,5 @@ export interface IPost extends Document {
     title: string;
     content: string;
     owner: string;
+    image?: string;
 }
