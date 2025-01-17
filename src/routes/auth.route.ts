@@ -5,6 +5,16 @@ const router = express.Router();
 
 /**
  * @swagger
+ * components:
+ *   securitySchemas:
+ *     bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ */
+
+/**
+ * @swagger
  * tags:
  *   name: User
  *   description: API for managing user registration and auth
