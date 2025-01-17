@@ -61,8 +61,8 @@ const router = express.Router();
  *           type: string
  *           description: user's password
  *     Tokens:
- *      type: object
- *      required:
+ *       type: object
+ *       required:
  *         - accessToken
  *         - refreshToken
  *       properties:
@@ -73,13 +73,13 @@ const router = express.Router();
  *           type: string
  *           description: user's refresh token
  *     LogoutMessage:
- *      type: object
- *      required:
+ *       type: object
+ *       required:
  *         - message
  *       properties:
  *         message:
  *           type: string
- *           description: a logout message    
+ *           description: a logout message
  */
 
 
@@ -89,9 +89,7 @@ const router = express.Router();
  *   post:
  *     summary: 
  *     tags: [User]
- *     security:
- *       - bearerAuth: []
-  *     requestBody:
+ *     requestBody:
  *       required: true
  *       content:
  *         application/json:
@@ -121,9 +119,7 @@ router.post('/register', authController.register);
  *   post:
  *     summary: 
  *     tags: [User]
- *     security:
- *       - bearerAuth: []
-  *     requestBody:
+ *     requestBody:
  *       required: true
  *       content:
  *         application/json:
@@ -172,7 +168,7 @@ router.post('/refreshToken', authController.refreshToken);
 
 /**
  * @swagger
-* /api/auth/refreshToken:
+* /api/auth/logout:
  *   post:
  *     summary: 
  *     tags: [User]
