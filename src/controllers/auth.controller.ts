@@ -112,6 +112,10 @@ export class AuthController {
         
                         if (!user) {
                             res.status(401).send({ message: 'User not found' });
+                        } else if (!user.tokens.includes(token)) {
+                            user.tokens = [];
+                            await user.save();
+                            res.status(403).send({ message: 'invalid request' });
                         } else {
                             const accessToken = await generateJWTAccessToken(user._id);
                             const refreshToken = await generateJWTRefreshToken(user._id);
@@ -145,7 +149,11 @@ export class AuthController {
         
                         if (!user) {
                             res.status(403).json('invalid request');
-                        }  else {
+                        } else if (!user.tokens.includes(token)) {
+                            user.tokens = [];
+                            await user.save();
+                            res.status(403).json({ message: 'invalid request' });
+                        } else {
                             user.tokens.splice(user.tokens.indexOf(token), 1);
                             await user.save();
                             res.status(200).json({ message: 'logged out' });

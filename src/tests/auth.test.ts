@@ -229,18 +229,6 @@ describe("Authentication tests", () => {
       expect(response.text).toContain("invalid request");
     });
 
-    it("should handle invalid refresh token", async () => {
-      // Mocking invalid refresh token
-      const invalidRefreshToken = jwt.sign({ _id: "userId" }, "invalidSecret");
-
-      const response = await request(app)
-        .post("/api/auth/logout")
-        .set("Authorization", `JWT ${invalidRefreshToken}`)
-        .expect(403);
-
-      expect(response.text).toContain("invalid request");
-    });
-
     it("should return 500 if any error occurs during the process", async () => {
       // Mocking the User.findById method to throw an error
       jest
@@ -249,7 +237,7 @@ describe("Authentication tests", () => {
 
       const response = await request(app)
         .post("/api/auth/logout")
-        .set("Authorization", `JWT ${newRefreshToken}`)
+        .set("Authorization", `JWT ${refreshToken}`)
         .expect(403);
 
       expect(response.text).toContain("Database error");
@@ -262,6 +250,16 @@ describe("Authentication tests", () => {
         .expect(200);
 
       expect(response.text).toContain("logged out");
+    });
+
+    it("should handle invalid refresh token", async () => {
+      // Mocking invalid refresh token
+      const response = await request(app)
+        .post("/api/auth/logout")
+        .set("Authorization", `JWT ${refreshToken}`)
+        .expect(403);
+
+      expect(response.text).toContain("invalid request");
     });
   });
 });
