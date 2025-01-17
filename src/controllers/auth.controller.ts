@@ -103,9 +103,6 @@ export class AuthController {
     refreshToken = async (req: Request, res: Response) => {
         const authHeaders = req.headers['authorization'];
         const token = authHeaders && authHeaders.split(' ')[1];
-        if (token === null) {
-            res.sendStatus(401).json({ message: 'no token provided' });
-        } else {
             verifyToken(token, process.env.REFRESH_TOKEN_SECRET, async (err: any, user: { _id: string}) => {
                 if(err) res.status(403).send('invalid request');
                 else {
@@ -136,15 +133,11 @@ export class AuthController {
                 }
                 
             });
-        }  
     }
 
     logout = async (req: Request, res: Response) => {
         const authHeaders = req.headers['authorization'];
         const token = authHeaders && authHeaders.split(' ')[1];
-        if (token === null) {
-            res.sendStatus(401).json({message: 'no token provided'});
-        } else {
             jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, async (err: any, user: IUser) => {
                 if(err) {
                     res.status(403).json({ message: 'invalid request' });
@@ -171,7 +164,6 @@ export class AuthController {
                 }
 
             });
-        }   
     }
 };
 
