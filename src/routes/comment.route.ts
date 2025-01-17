@@ -6,6 +6,17 @@ const router = express.Router();
 
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+
+
+/**
+ * @swagger
  * tags:
  *   name: Comment
  *   description: API for managing comments on posts
@@ -102,7 +113,7 @@ router.get('/', authMiddleware, (req, res) => {
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/models/schemas/Comment'
+ *               $ref: '#/components/schemas/Comment'
  *       404:
  *         description: Comment not found
  *       500:

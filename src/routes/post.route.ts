@@ -6,6 +6,16 @@ const router = express.Router();
 
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ */
+
+/**
+ * @swagger
  * tags:
  *   name: Post
  *   description: API for managing posts
@@ -45,7 +55,7 @@ const router = express.Router();
  *           format: date-time
  *           description: timestamp of the post creation
  *
- *     PostCreateRequest:
+*     PostCreateRequest:
  *       type: object
  *       required:
  *         - title
@@ -110,7 +120,7 @@ const router = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/models/schemas/Post'
+ *               $ref: '#/components/schemas/Post'
  *       404:
  *         description: Post not found
  *       500:
