@@ -9,14 +9,17 @@ import {
   generateJWTRefreshToken,
   verifyToken,
 } from '../commons/utils/auth';
+import { OAuth2Client } from 'google-auth-library';
 
 const bcrypt = require('bcrypt');
 
 export class AuthController {
   model: Model<IUser>;
+  client;
 
   constructor(model: Model<IUser>) {
     this.model = model;
+    this.client = new OAuth2Client();
   }
 
   #isUserValid(userDetails: IUser): boolean {
@@ -181,6 +184,42 @@ export class AuthController {
         }
       }
     );
+  };
+
+  googleSignin = async (req: Request, res: Response) => {
+    const credential = req.body.credential;
+    try {
+      const ticket = await this.client.verifyIdToken({
+        idToken: credential.credential,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+
+      const payload = ticket.getPayload();
+      const email = payload?.email;
+      let user = await User.findOne({ email: email });
+
+      if (user == null) {
+        user = await User.create({
+          email: email,
+          imgUrl: payload?.picture,
+          password: 'google-signin',
+          name: payload?.name,
+        });
+      }
+
+      const accessToken = await generateJWTAccessToken(user._id);
+      const refreshToken = await generateJWTRefreshToken(user._id);
+
+      res.status(200).send({
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        user: {
+          _id: user._id,
+        },
+      });
+    } catch (err) {
+      res.status(400).send('error missing email or password');
+    }
   };
 }
 
