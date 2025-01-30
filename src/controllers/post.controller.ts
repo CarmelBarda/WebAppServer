@@ -27,8 +27,6 @@ export class PostController {
     const totalPosts = await Post.countDocuments();
     const hasMore = totalPosts > page * limit;
 
-    // const allPosts = await this.model.find({}).populate('owner', 'name').exec();
-    // res.status(200).send(allPosts);
     res.status(200).json({ posts, hasMore });
   };
 
