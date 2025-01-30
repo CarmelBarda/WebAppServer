@@ -33,7 +33,7 @@ export class CommentController {
           })
           .populate('userId', 'name');
 
-        res.status(200).send(comment[0]);
+        res.status(200).send(comment);
       }
     } catch (err) {
       res.status(500).json({ message: err.message });
