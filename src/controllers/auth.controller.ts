@@ -102,7 +102,6 @@ export class AuthController {
               accessToken: accessToken,
               refreshToken: refreshToken,
               user: {
-                // 'name': user.name,
                 _id: user._id,
               },
             });
