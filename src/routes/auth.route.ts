@@ -1,5 +1,5 @@
-import express from "express";
-import { authController } from "../controllers/auth.controller";
+import express from 'express';
+import { authController } from '../controllers/auth.controller';
 
 const router = express.Router();
 
@@ -92,12 +92,11 @@ const router = express.Router();
  *           description: a logout message
  */
 
-
 /**
  * @swagger
-* /api/auth/register:
+ * /api/auth/register:
  *   post:
- *     summary: 
+ *     summary:
  *     tags: [User]
  *     requestBody:
  *       required: true
@@ -125,9 +124,9 @@ router.post('/register', authController.register);
 
 /**
  * @swagger
-* /api/auth/login:
+ * /api/auth/login:
  *   post:
- *     summary: 
+ *     summary:
  *     tags: [User]
  *     requestBody:
  *       required: true
@@ -154,9 +153,9 @@ router.post('/login', authController.login);
 
 /**
  * @swagger
-* /api/auth/refreshToken:
+ * /api/auth/refreshToken:
  *   post:
- *     summary: 
+ *     summary:
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
@@ -178,9 +177,9 @@ router.post('/refreshToken', authController.refreshToken);
 
 /**
  * @swagger
-* /api/auth/logout:
+ * /api/auth/logout:
  *   post:
- *     summary: 
+ *     summary:
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
@@ -197,5 +196,7 @@ router.post('/refreshToken', authController.refreshToken);
  *         description: no token provided
  */
 router.post('/logout', authController.logout);
+
+router.post('/google', authController.googleSignin);
 
 export default router;
