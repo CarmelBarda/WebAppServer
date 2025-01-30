@@ -25,7 +25,9 @@ const postData = {
   _id: new mongoose.Types.ObjectId(),
   owner: userData._id,
   title: "Test Post",
-  content: "This is a test post."
+  review: "This is a test post.",
+  likesCount: 0,
+  rate: 2,
 };
 
 jest.setTimeout(10000);

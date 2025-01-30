@@ -10,12 +10,14 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkx
 ### Create post
 POST http://localhost:3000/api/post
 Content-Type: application/json
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkxNWI5ZDE1MTY0NWE1OWIiLCJpYXQiOjE3MzU5MzQ5NDIsImV4cCI6MTczNTk0MjE0Mn0.fjqW87Tw0URuOZyveQQRFqduzZO18Uis7KX5BMqS0H8
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkxNWI5ZDE1MTY0NWE1OWIiLCJpYXQiOjE3MzgwMTA5MTIsImV4cCI6MTczODAxODExMn0.iMfDeiOgF0rdR6Oh-JSeJB77OO9q_QqidEL9VKNGzDM
 
 {
     "title": "new Post",
-    "content": "Contenttt",
-    "owner": "6776dae4891a0a3c15d223b8"
+    "review": "Contenttt",
+    "owner": "6776dae4891a0a3c15d223b8",
+    "rate": 4,
+    "likesCount": 23
 }
 
 ### Update post
@@ -25,7 +27,7 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkx
 
 {
     "title": "Post 1",
-    "content": "updated Content!",
+    "review": "updated Content!",
     "owner": "675016b349f76c9c0a7ab99a"
 }
 

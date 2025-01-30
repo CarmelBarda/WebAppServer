@@ -23,7 +23,9 @@ const postData = {
   _id: new mongoose.Types.ObjectId(),
   owner: userData._id,
   title: "Test Post",
-  content: "This is a test post.",
+  review: "This is a test post.",
+  likesCount: 0,
+  rate: 3,
 };
 
 beforeAll(async () => {
@@ -64,7 +66,9 @@ describe("PostController", () => {
 
       expect(response.body).toHaveProperty("_id");
       expect(response.body.title).toBe(postData.title);
-      expect(response.body.content).toBe(postData.content);
+      expect(response.body.review).toBe(postData.review);
+      expect(response.body.likesCount).toBe(postData.likesCount);
+      expect(response.body.rate).toBe(postData.rate);
       expect(response.status).toBe(200);
 
       createdPostId = response.body._id;
@@ -98,8 +102,10 @@ describe("PostController", () => {
     it("should update an existing post", async () => {
       const updateData = {
         title: "This is an updated test post title",
-        content: "content of updated test post",
+        review: "review of updated test post",
         owner: userData._id,
+        likesCount: postData.likesCount,
+        rate: postData.rate,
       };
 
       const response = await request(app)
@@ -110,14 +116,14 @@ describe("PostController", () => {
 
       expect(response.body).toHaveProperty("_id");
       expect(response.body.title).toBe(updateData.title);
-      expect(response.body.content).toBe(updateData.content);
+      expect(response.body.review).toBe(updateData.review);
       expect(response.status).toBe(200);
     });
 
     it("should return 401 when trying to update a post without authentication", async () => {
       const updateData = {
         title: "This is an updated test post title",
-        content: "content of updated test post",
+        review: "review of updated test post",
         owner: userData._id,
       };
 
@@ -133,7 +139,7 @@ describe("PostController", () => {
 
       const updateData = {
         title: "This is an updated test post title",
-        content: "content of updated test post",
+        review: "review of updated test post",
         owner: userData._id,
       };
 
