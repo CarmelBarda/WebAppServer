@@ -37,9 +37,9 @@ const router = express.Router();
  *         title:
  *           type: string
  *           description: post's title
- *         content:
+ *         review:
  *           type: string
- *           description: post's content
+ *           description: post's review
  *         image:
  *           type: string
  *           description: post's image name
@@ -52,14 +52,14 @@ const router = express.Router();
  *       type: object
  *       required:
  *         - title
- *         - content
+ *         - review
  *       properties:
  *         title:
  *           type: string
  *           description: post's title
- *         content:
+ *         review:
  *           type: string
- *           description: post's content
+ *           description: post's review
  *         image:
  *           type: string
  *           description: post's image name
@@ -70,9 +70,9 @@ const router = express.Router();
  *         title:
  *           type: string
  *           description: updated title of the post
- *         content:
+ *         review:
  *           type: string
- *           description: updated content of the post
+ *           description: updated review of the post
  *         image:
  *           type: string
  *           description: post's image name
@@ -158,7 +158,7 @@ router.get('/', authMiddleware, (req, res) => {
  *             $ref: '#/components/schemas/PostCreateRequest'
  *           example:
  *             title: "Random title"
- *             content: "Content for the post"
+ *             review: "review for the post"
  *             owner: "675016b349f76c9c0a7ab99a"
  *             image: "RandomImage.jpg"
  *     responses:
@@ -196,7 +196,7 @@ router.post('/', authMiddleware, postController.createPost);
  *             $ref: '#/components/schemas/PostUpdateRequest'
  *           example:
  *             title: "Updated title"
- *             content: "Updated content!"
+ *             review: "Updated review!"
  *             image: "RandomImage.jpg"
  *     responses:
  *       200:
