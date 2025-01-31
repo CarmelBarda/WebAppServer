@@ -98,3 +98,14 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkx
 ### refresh token
 POST http://localhost:3000/api/auth/refreshToken
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkxNWI5ZDE1MTY0NWE1OWIiLCJpYXQiOjE3MzU5OTU3MDd9.GlaS80SW69OAxpLnQTvGhnXXZ3DLChvwWdS2tc4sElY
+
+
+### Create like
+POST http://localhost:3000/api/like
+Content-Type: application/json
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5MjhiYzc2ZmI4NmQ3ZDllMmMiLCJpYXQiOjE3MzgzNTI2ODAsImV4cCI6MTczODM1OTg4MH0.YZ7O-Ouvp8eF41Ad--s8fZfLZx9kqmEymXW5vtcoOe8
+
+{
+    "userId": "679261928bc76fb86d7d9e2c",
+    "postId": "679ce63d3be6c7a6edc125ef"
+}
