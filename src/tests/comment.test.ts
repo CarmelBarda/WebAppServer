@@ -26,7 +26,6 @@ const postData = {
   owner: userData._id,
   title: 'Test Post',
   review: 'This is a test post.',
-  likesCount: 0,
   rate: 2,
 };
 

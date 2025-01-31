@@ -26,6 +26,7 @@ export class LikeController {
       const postId: string = req.params.postId as string;
 
       await this.model.deleteOne({ userId: userId, postId: postId });
+      res.status(200).send({ message: 'Like deleted' });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }

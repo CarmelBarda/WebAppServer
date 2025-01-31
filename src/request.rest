@@ -17,7 +17,6 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5Mjhi
     "review": "It Ends with Us is a romance novel by Colleen Hoover. It tells the story of Lily Bloom and her doomed romance with Ryle Kincaid. The novel is a standalone, but Hoover has stated that she is working on a sequel.",
     "owner": "679261928bc76fb86d7d9e2c",
     "rate": 5,
-    "likesCount": 234
 }
 
 ### Update post
