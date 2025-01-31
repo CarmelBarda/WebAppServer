@@ -17,6 +17,7 @@ const createServer = async (): Promise<Express> => {
     app.use(express.json());
 
     app.use('/api', BaseRouter);
+    app.use('/uploads', express.static('uploads'));
 
     dbConnection.on('error', (error) =>
       console.log(`error in db connection ${error}`)
