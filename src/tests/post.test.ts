@@ -24,7 +24,6 @@ const postData = {
   owner: userData._id,
   title: 'Test Post',
   review: 'This is a test post.',
-  likesCount: 0,
   rate: 3,
 };
 
@@ -67,7 +66,6 @@ describe('PostController', () => {
       expect(response.body).toHaveProperty('_id');
       expect(response.body.title).toBe(postData.title);
       expect(response.body.review).toBe(postData.review);
-      expect(response.body.likesCount).toBe(postData.likesCount);
       expect(response.body.rate).toBe(postData.rate);
       expect(response.status).toBe(200);
 
@@ -102,7 +100,6 @@ describe('PostController', () => {
         title: 'This is an updated test post title',
         review: 'review of updated test post',
         owner: userData._id,
-        likesCount: postData.likesCount,
         rate: postData.rate,
       };
 

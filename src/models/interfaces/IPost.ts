@@ -6,7 +6,6 @@ export interface IPost extends Document {
   title: string;
   review: string;
   rate: number;
-  likesCount: number;
   createdAt: Date;
   image?: string;
 }

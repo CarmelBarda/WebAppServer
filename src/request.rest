@@ -10,14 +10,13 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkx
 ### Create post
 POST http://localhost:3000/api/post
 Content-Type: application/json
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkxNWI5ZDE1MTY0NWE1OWIiLCJpYXQiOjE3MzgyNDI0MDIsImV4cCI6MTczODI0OTYwMn0.VNhARzvE72DWuX4Kt0D5_ocCeppobUnrk9Xw9IgTJSs
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5MjhiYzc2ZmI4NmQ3ZDllMmMiLCJpYXQiOjE3MzgzMzU3ODIsImV4cCI6MTczODM0Mjk4Mn0.kQxU0LS2iH8Z-mWgSdOPCWTEzXvWUdlVzX4CVgP2xyc
 
 {
-    "title": "new Post",
-    "review": "Contenttt very good book",
-    "owner": "6776dae4891a0a3c15d223b8",
-    "rate": 4,
-    "likesCount": 23
+    "title": "It ends with us",
+    "review": "It Ends with Us is a romance novel by Colleen Hoover. It tells the story of Lily Bloom and her doomed romance with Ryle Kincaid. The novel is a standalone, but Hoover has stated that she is working on a sequel.",
+    "owner": "679261928bc76fb86d7d9e2c",
+    "rate": 5,
 }
 
 ### Update post
@@ -37,6 +36,11 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkx
 
 ### Get comment by id
 GET http://localhost:3000/api/comment/6766baf03a9f5c7b26fc0aef
+
+### Get comments count by post id
+GET http://localhost:3000/api/comment/post/679ce63d3be6c7a6edc125ef
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5MjhiYzc2ZmI4NmQ3ZDllMmMiLCJpYXQiOjE3MzgzMzU3ODIsImV4cCI6MTczODM0Mjk4Mn0.kQxU0LS2iH8Z-mWgSdOPCWTEzXvWUdlVzX4CVgP2xyc
+
 
 ### Create comment
 POST http://localhost:3000/api/comment
@@ -81,7 +85,7 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "aya.colman@ac.il",
+    "email": "carmelbd78@gmail.com",
     "password": "1234"
 }
 
@@ -93,3 +97,14 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkx
 ### refresh token
 POST http://localhost:3000/api/auth/refreshToken
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkxNWI5ZDE1MTY0NWE1OWIiLCJpYXQiOjE3MzU5OTU3MDd9.GlaS80SW69OAxpLnQTvGhnXXZ3DLChvwWdS2tc4sElY
+
+
+### Create like
+POST http://localhost:3000/api/like
+Content-Type: application/json
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5MjhiYzc2ZmI4NmQ3ZDllMmMiLCJpYXQiOjE3MzgzNTI2ODAsImV4cCI6MTczODM1OTg4MH0.YZ7O-Ouvp8eF41Ad--s8fZfLZx9kqmEymXW5vtcoOe8
+
+{
+    "userId": "679261928bc76fb86d7d9e2c",
+    "postId": "679ce63d3be6c7a6edc125ef"
+}

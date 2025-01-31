@@ -7,6 +7,5 @@ export const postSchema = new mongoose.Schema<IPost>({
   owner: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
   image: { type: String, required: false },
   rate: { type: Number, required: true },
-  likesCount: { type: Number, required: true },
   createdAt: { type: Date, default: Date.now },
 });
