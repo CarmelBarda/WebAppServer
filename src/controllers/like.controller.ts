@@ -22,8 +22,8 @@ export class LikeController {
 
   deleteLike = async (req: Request, res: Response) => {
     try {
-      const userId: string = req.body.userId as string;
-      const postId: string = req.body.postId as string;
+      const userId: string = req.params.userId as string;
+      const postId: string = req.params.postId as string;
 
       await this.model.deleteOne({ userId: userId, postId: postId });
     } catch (err) {
@@ -39,9 +39,9 @@ export class LikeController {
         postId: postId,
       });
 
-      const likedUserIds = postLikes.map((like) => like.userId);
+      const likedUserIds = postLikes.map((like) => like.userId.toString());
 
-      res.status(200).send({ likedUserIds });
+      res.status(200).send(likedUserIds);
     } catch (err) {
       res.status(500).json({ message: err.message });
     }

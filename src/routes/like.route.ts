@@ -102,4 +102,33 @@ router.get('/:postId', authMiddleware, likeController.getPostLikes);
  */
 router.post('/', authMiddleware, likeController.addLike);
 
+/**
+ * @swagger
+ * /api/comment/{postId}/{userId}:
+ *   delete:
+ *     summary: Delete a like
+ *     tags: [Comment]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         description: ID of the post to delete from
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to delete like
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Like deleted successfully
+ *       404:
+ *         description: like not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete('/:postId/:userId', authMiddleware, likeController.deleteLike);
+
 export default router;
