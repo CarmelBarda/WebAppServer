@@ -175,8 +175,8 @@ describe('PostController', () => {
       .set('Authorization', `JWT ${accessToken}`);
 
     expect(response.status).toBe(200);
-    expect(response.body).toBeInstanceOf(Array);
-    expect(response.body.length).toBeGreaterThan(0);
+    expect(response.body.posts).toBeInstanceOf(Array);
+    expect(response.body.posts.length).toBeGreaterThan(0);
   });
 
   it('should get a specific post by ID', async () => {

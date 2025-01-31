@@ -8,4 +8,5 @@ export const postSchema = new mongoose.Schema<IPost>({
   image: { type: String, required: false },
   rate: { type: Number, required: true },
   likesCount: { type: Number, required: true },
+  createdAt: { type: Date, default: Date.now },
 });

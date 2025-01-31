@@ -10,9 +10,24 @@ export class PostController {
     this.model = model;
   }
 
-  getAllPosts = async (_: Request, res: Response) => {
-    const allPosts = await this.model.find({}).populate('owner', 'name').exec();
-    res.status(200).send(allPosts);
+  getAllPosts = async (req: Request, res: Response) => {
+    const page = parseInt(req.query.page as string) || 1; // Default to page 1
+    const limit = parseInt(req.query.limit as string) || 4; // Default to 4 posts per page
+    const skip = (page - 1) * limit; // Calculate how many posts to skip
+
+    // Fetch paginated posts
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate('owner', 'name')
+      .exec();
+
+    // Check if there are more posts
+    const totalPosts = await Post.countDocuments();
+    const hasMore = totalPosts > page * limit;
+
+    res.status(200).json({ posts, hasMore });
   };
 
   getPostById = async (req: Request, res: Response) => {
