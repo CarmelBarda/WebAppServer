@@ -1,6 +1,6 @@
-import express from "express";
-import { commentController } from "../controllers/comment.controller";
-import authMiddleware from "../commons/middlewares/auth";
+import express from 'express';
+import { commentController } from '../controllers/comment.controller';
+import authMiddleware from '../commons/middlewares/auth';
 
 const router = express.Router();
 
@@ -13,7 +13,6 @@ const router = express.Router();
  *       scheme: bearer
  *       bearerFormat: JWT
  */
-
 
 /**
  * @swagger
@@ -55,10 +54,9 @@ const router = express.Router();
  *           description: comment's content
  */
 
-
 /**
  * @swagger
-* /api/comment:
+ * /api/comment:
  *   get:
  *     summary: Get comments by post id or all comments
  *     tags: [Comment]
@@ -84,13 +82,12 @@ const router = express.Router();
  *         description: Internal server error
  */
 router.get('/', authMiddleware, (req, res) => {
-    if (req.query.post) {
-        return commentController.getPostComments(req, res);
-    }
-    
-    return commentController.getAllComments(req, res);
-});
+  if (req.query.post) {
+    return commentController.getPostComments(req, res);
+  }
 
+  return commentController.getAllComments(req, res);
+});
 
 /**
  * @swagger
@@ -123,6 +120,39 @@ router.get('/:id', authMiddleware, commentController.getCommentById);
 
 /**
  * @swagger
+ * /api/comment/{postId}:
+ *   get:
+ *     summary: Get comments count by post id
+ *     tags: [Comment]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         description: post id of the comments count to get
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: The requested comments count
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Comment'
+ *       404:
+ *         description: Comments count not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get(
+  '/post/:postId',
+  authMiddleware,
+  commentController.getPostCommentsAmount
+);
+
+/**
+ * @swagger
  * /api/comment:
  *   post:
  *     summary: Add a comment to a post
@@ -151,10 +181,9 @@ router.get('/:id', authMiddleware, commentController.getCommentById);
  */
 router.post('/', authMiddleware, commentController.createComment);
 
-
 /**
  * @swagger
-* /api/comment/{id}:
+ * /api/comment/{id}:
  *   put:
  *     summary: Update a comment by id
  *     tags: [Comment]
@@ -190,7 +219,6 @@ router.post('/', authMiddleware, commentController.createComment);
  *         description: Internal server error
  */
 router.put('/:id', authMiddleware, commentController.updateComment);
-
 
 /**
  * @swagger
