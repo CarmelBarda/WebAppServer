@@ -89,6 +89,20 @@ export class CommentController {
     }
   };
 
+  getPostCommentsAmount = async (req: Request, res: Response) => {
+    try {
+      const postId: string = req.params.postId as string;
+
+      const postCommentsAmount = await this.model.countDocuments({
+        postId: postId,
+      });
+
+      res.status(200).send({ amount: postCommentsAmount });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  };
+
   deleteComment = async (req: Request, res: Response) => {
     try {
       const commentId = req.params.commentId;
