@@ -235,9 +235,9 @@ export class AuthController {
       } else {
         user.imgUrl = imgUrl;
         user.name = name;
-        await user.save();
+        const updatedUser = await user.save();
 
-        res.status(200).send('User Details updated');
+        res.status(200).send(updatedUser);
       }
     } catch (err) {
       res.status(500).json({ message: err.message });
