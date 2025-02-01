@@ -73,8 +73,10 @@ export class PostController {
         .limit(limit)
         .populate('owner', 'name');
 
-      // Check if there are more posts
-      const totalPosts = await Post.countDocuments();
+      // Check if there are more posts by user
+      const totalPosts = await Post.countDocuments({
+        owner: senderId,
+      });
       const hasMore = totalPosts > page * limit;
 
       res.status(200).json({ posts: postsBySender, hasMore });
