@@ -1,6 +1,6 @@
-import express from "express";
-import postController from "../controllers/post.controller";
-import authMiddleware from "../commons/middlewares/auth";
+import express from 'express';
+import postController from '../controllers/post.controller';
+import authMiddleware from '../commons/middlewares/auth';
 
 const router = express.Router();
 
@@ -48,7 +48,7 @@ const router = express.Router();
  *           format: date-time
  *           description: timestamp of the post creation
  *
-*     PostCreateRequest:
+ *     PostCreateRequest:
  *       type: object
  *       required:
  *         - title
@@ -109,7 +109,7 @@ router.get('/:id', authMiddleware, postController.getPostById);
 
 /**
  * @swagger
-* /api/post:
+ * /api/post:
  *   get:
  *     summary: Get posts by user id or all posts
  *     tags: [Post]
@@ -135,16 +135,16 @@ router.get('/:id', authMiddleware, postController.getPostById);
  *         description: Internal server error
  */
 router.get('/', authMiddleware, (req, res) => {
-    if (req.query.sender) {
-        return postController.getPostsBySender(req, res);
-    }
-    
-    return postController.getAllPosts(req, res);
+  if (req.query.sender) {
+    return postController.getPostsBySender(req, res);
+  }
+
+  return postController.getAllPosts(req, res);
 });
 
 /**
  * @swagger
-* /api/post:
+ * /api/post:
  *   post:
  *     summary: Create a new post
  *     tags: [Post]
@@ -175,7 +175,7 @@ router.post('/', authMiddleware, postController.createPost);
 
 /**
  * @swagger
-* /api/post/{id}:
+ * /api/post/{id}:
  *   put:
  *     summary: Update a post by id
  *     tags: [Post]
@@ -211,5 +211,30 @@ router.post('/', authMiddleware, postController.createPost);
  *         description: Internal server error
  */
 router.put('/:id', authMiddleware, postController.updatePost);
+
+/**
+ * @swagger
+ * /api/post/{postId}:
+ *   delete:
+ *     summary: Delete a post
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         description: ID of the post to delete
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Post is deleted successfully
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete('/:postId', authMiddleware, postController.deletePost);
 
 export default router;

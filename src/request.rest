@@ -10,7 +10,7 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkx
 ### Create post
 POST http://localhost:3000/api/post
 Content-Type: application/json
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5MjhiYzc2ZmI4NmQ3ZDllMmMiLCJpYXQiOjE3MzgzMzU3ODIsImV4cCI6MTczODM0Mjk4Mn0.kQxU0LS2iH8Z-mWgSdOPCWTEzXvWUdlVzX4CVgP2xyc
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkxNWI5ZDE1MTY0NWE1OWIiLCJpYXQiOjE3MzgzNjU3NDEsImV4cCI6MTczODM3Mjk0MX0.GAsgF-CCx8TReoYqLauqA3PkglQrdUKKUIbX3v9CTzs
 
 {
     "title": "It ends with us",
@@ -30,12 +30,17 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkx
     "owner": "675016b349f76c9c0a7ab99a"
 }
 
+### Delete post
+DELETE http://localhost:3000/api/post/679d5eb9830e7bc3d6a90d5e
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkxNWI5ZDE1MTY0NWE1OWIiLCJpYXQiOjE3MzgzNjU3NDEsImV4cCI6MTczODM3Mjk0MX0.GAsgF-CCx8TReoYqLauqA3PkglQrdUKKUIbX3v9CTzs
+
 ### Get post by sender
 GET http://localhost:3000/api/post?sender=675016b349f76c9c0a7ab99a
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkxNWI5ZDE1MTY0NWE1OWIiLCJpYXQiOjE3MzU5MzQ5NDIsImV4cCI6MTczNTk0MjE0Mn0.fjqW87Tw0URuOZyveQQRFqduzZO18Uis7KX5BMqS0H8
 
 ### Get comment by id
 GET http://localhost:3000/api/comment/6766baf03a9f5c7b26fc0aef
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkxNWI5ZDE1MTY0NWE1OWIiLCJpYXQiOjE3MzgzNjU3NDEsImV4cCI6MTczODM3Mjk0MX0.GAsgF-CCx8TReoYqLauqA3PkglQrdUKKUIbX3v9CTzs
 
 ### Get comments count by post id
 GET http://localhost:3000/api/comment/post/679ce63d3be6c7a6edc125ef
@@ -56,6 +61,7 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkx
 ### Update comment
 PUT http://localhost:3000/api/comment/6769b1895938d243f1752c5d
 Content-Type: application/json
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkxNWI5ZDE1MTY0NWE1OWIiLCJpYXQiOjE3MzgzNjU3NDEsImV4cCI6MTczODM3Mjk0MX0.GAsgF-CCx8TReoYqLauqA3PkglQrdUKKUIbX3v9CTzs
 
 {
     "message": "updated comment!"
@@ -63,9 +69,11 @@ Content-Type: application/json
 
 ### Get post's comments
 GET http://localhost:3000/api/comment?post=675073bc49f76c9c0a7ab99c
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkxNWI5ZDE1MTY0NWE1OWIiLCJpYXQiOjE3MzgzNjU3NDEsImV4cCI6MTczODM3Mjk0MX0.GAsgF-CCx8TReoYqLauqA3PkglQrdUKKUIbX3v9CTzs
 
 ### Delete comment
 DELETE http://localhost:3000/api/comment/6769b1b85938d243f1752c5f
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkxNWI5ZDE1MTY0NWE1OWIiLCJpYXQiOjE3MzgzNjU3NDEsImV4cCI6MTczODM3Mjk0MX0.GAsgF-CCx8TReoYqLauqA3PkglQrdUKKUIbX3v9CTzs
 
 
 # Authentication

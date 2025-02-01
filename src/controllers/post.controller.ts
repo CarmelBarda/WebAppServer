@@ -57,6 +57,10 @@ export class PostController {
   };
 
   getPostsBySender = async (req: Request, res: Response) => {
+    const page = parseInt(req.query.page as string) || 1; // Default to page 1
+    const limit = parseInt(req.query.limit as string) || 4; // Default to 4 posts per page
+    const skip = (page - 1) * limit;
+
     try {
       const senderId = req.query.sender as string;
 
@@ -64,9 +68,16 @@ export class PostController {
         .find({
           owner: senderId,
         })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
         .populate('owner', 'name');
 
-      res.status(200).send(postsBySender);
+      // Check if there are more posts
+      const totalPosts = await Post.countDocuments();
+      const hasMore = totalPosts > page * limit;
+
+      res.status(200).json({ posts: postsBySender, hasMore });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
@@ -87,6 +98,21 @@ export class PostController {
         res.status(404).json({ error: `Post ${postId} not found` });
       } else {
         res.status(200).send(updatedPost);
+      }
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  };
+
+  deletePost = async (req: Request, res: Response) => {
+    try {
+      const postId = req.params.postId;
+
+      const deletedPost = await this.model.findByIdAndDelete(postId);
+      if (!deletedPost) {
+        res.status(404).json({ error: 'Post not found' });
+      } else {
+        res.status(200).json({ message: 'Post deleted successfully' });
       }
     } catch (err) {
       res.status(500).json({ message: err.message });
