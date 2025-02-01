@@ -201,10 +201,10 @@ describe('PostController', () => {
       .set('Authorization', `JWT ${accessToken}`);
 
     expect(response.status).toBe(200);
-    expect(response.body).toBeInstanceOf(Array);
-    expect(response.body.length).toBeGreaterThan(0);
+    expect(response.body.posts).toBeInstanceOf(Array);
+    expect(response.body.posts.length).toBeGreaterThan(0);
     expect(
-      response.body.forEach((post) => {
+      response.body.posts.forEach((post) => {
         post.owner === userData._id;
       })
     );
@@ -222,5 +222,50 @@ describe('PostController', () => {
 
     expect(response.status).toBe(500);
     expect(response.body).toHaveProperty('message', 'Internal Server Error');
+  });
+
+  describe('deletePost', () => {
+    it('should delete a post by its id', async () => {
+      const response = await request(app)
+        .delete(`/api/post/${createdPostId}`)
+        .set('Authorization', `JWT ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toHaveProperty(
+        'message',
+        'Post deleted successfully'
+      );
+    });
+
+    it('should return 401 when deleteing a post without authentication', async () => {
+      const response = await request(app).delete(`/api/post/${createdPostId}`);
+
+      expect(response.status).toBe(401);
+    });
+
+    it('should return 404 when deleting non-existing post', async () => {
+      const nonExistingPostId = generateObjectId();
+
+      const response = await request(app)
+        .delete(`/api/post/${nonExistingPostId}`)
+        .set('Authorization', `JWT ${accessToken}`)
+        .expect(404);
+
+      expect(response.body).toHaveProperty('error', 'Post not found');
+    });
+
+    it('should return 500 when encountering internal server error while deleting a post', async () => {
+      jest.spyOn(Post, 'findByIdAndDelete').mockImplementationOnce(() => {
+        throw new Error('Internal Server Error');
+      });
+
+      const response = await request(app)
+        .delete(`/api/post/${createdPostId}`)
+        .set('Authorization', `JWT ${accessToken}`);
+
+      expect(response.status).toBe(500);
+
+      expect(response.body).toHaveProperty('error', 'Internal Server Error');
+    });
   });
 });
