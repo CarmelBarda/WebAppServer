@@ -209,6 +209,11 @@ export class AuthController {
       const accessToken = await generateJWTAccessToken(user._id);
       const refreshToken = await generateJWTRefreshToken(user._id);
 
+      if (user.tokens == null) user.tokens = [refreshToken];
+      else user.tokens.push(refreshToken);
+
+      await user.save();
+
       res.status(200).send({
         accessToken: accessToken,
         refreshToken: refreshToken,
