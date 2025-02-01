@@ -1,9 +1,10 @@
-import mongoose from "mongoose";
-import { IUser } from "../interfaces/IUser";
+import mongoose from 'mongoose';
+import { IUser } from '../interfaces/IUser';
 
 export const userSchema = new mongoose.Schema<IUser>({
-    name: { type: String, required: true },
-    email: { type: String, required: true },
-    password: { type: String, required: true },
-    tokens: { type: [String] }
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  tokens: { type: [String] },
+  imgUrl: { type: String, required: false },
 });

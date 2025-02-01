@@ -90,6 +90,15 @@ const router = express.Router();
  *         message:
  *           type: string
  *           description: a logout message
+ *     UserUpdateRequest:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: updated name of the user
+ *         image:
+ *           type: string
+ *           description: user's image name
  */
 
 /**
@@ -198,5 +207,43 @@ router.post('/refreshToken', authController.refreshToken);
 router.post('/logout', authController.logout);
 
 router.post('/google', authController.googleSignin);
+
+/**
+ * @swagger
+ * /api/auth/{userId}:
+ *   put:
+ *     summary: Update a user by id
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: id of the user to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserUpdateRequest'
+ *           example:
+ *             name: "Updated name"
+ *             image: "RandomImage.jpg"
+ *     responses:
+ *       200:
+ *         description: The updated user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.put('/:userId', authController.updateUser);
 
 export default router;
