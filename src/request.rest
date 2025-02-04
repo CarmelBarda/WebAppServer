@@ -121,8 +121,8 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5Mjhi
 ### Gemini request
 GET http://localhost:3000/api/gemini
 Content-Type: application/json
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5MjhiYzc2ZmI4NmQ3ZDllMmMiLCJpYXQiOjE3Mzg1MTY0MjQsImV4cCI6MTczODUyMzYyNH0.1jnH-RkzESF-CJv5uYFrvhGV0XyA0pPxAreCTCGdcmk
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5MjhiYzc2ZmI4NmQ3ZDllMmMiLCJpYXQiOjE3Mzg2OTE2MDAsImV4cCI6MTczODY5ODgwMH0.mhVUvIb46NuKVLmYdU_0UPyHA7HcwJIqC894-weCYVE
 
 {
-    "prompt": "Hello, how are you?"
+    "bookName": "It ends with us"
 }

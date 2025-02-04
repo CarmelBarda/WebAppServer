@@ -6,10 +6,16 @@ export const sendGeminiReq = async (req: Request, res: Response) => {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
-    const prompt = req.body.prompt;
-    const result = await model.generateContent(prompt);
+    const bookName = req.body.bookName;
+    const prompt = `I have read and liked the book: ${bookName}. 
+    I want you to give me a reccomentation for my next book based on this book.
+    Please return an json answer with fields: title, author, and description.
+    Please return the response without the word json at the begginning.`;
 
-    res.status(200).send(result.response.text());
+    const result = await model.generateContent(prompt);
+    const json = JSON.parse(result.response.text());
+
+    res.status(200).json(json);
   } catch (err) {
     res.status(500).json({ message: 'Gemini Request Failed.' });
   }
