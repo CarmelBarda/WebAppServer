@@ -6,5 +6,5 @@ export const userSchema = new mongoose.Schema<IUser>({
   email: { type: String, required: true },
   password: { type: String, required: true },
   tokens: { type: [String] },
-  imgUrl: { type: String, required: false },
+  img: { type: String, required: false },
 });

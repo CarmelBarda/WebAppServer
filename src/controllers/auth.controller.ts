@@ -198,7 +198,7 @@ export class AuthController {
       if (user == null) {
         user = await User.create({
           email: email,
-          imgUrl: payload?.picture,
+          img: payload?.picture,
           password: 'google-signin',
           name: payload?.name,
         });
@@ -224,7 +224,7 @@ export class AuthController {
 
   updateUser = async (req: Request, res: Response) => {
     const userId = req.params.userId;
-    const imgUrl = req.body.imgUrl;
+    const img = req.body.img;
     const name = req.body.name;
 
     try {
@@ -233,7 +233,7 @@ export class AuthController {
       if (!user) {
         res.status(404).send('User not found');
       } else {
-        user.imgUrl = imgUrl;
+        user.img = img;
         user.name = name;
         const updatedUser = await user.save();
 
