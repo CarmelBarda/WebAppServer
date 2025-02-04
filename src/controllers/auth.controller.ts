@@ -101,9 +101,7 @@ export class AuthController {
             res.status(200).send({
               accessToken: accessToken,
               refreshToken: refreshToken,
-              user: {
-                _id: user._id,
-              },
+              user: user,
             });
           }
         }
@@ -217,12 +215,32 @@ export class AuthController {
       res.status(200).send({
         accessToken: accessToken,
         refreshToken: refreshToken,
-        user: {
-          _id: user._id,
-        },
+        user: user,
       });
     } catch (err) {
       res.status(400).send('error missing email or password');
+    }
+  };
+
+  updateUser = async (req: Request, res: Response) => {
+    const userId = req.params.userId;
+    const imgUrl = req.body.imgUrl;
+    const name = req.body.name;
+
+    try {
+      const user = await User.findById(userId);
+
+      if (!user) {
+        res.status(404).send('User not found');
+      } else {
+        user.imgUrl = imgUrl;
+        user.name = name;
+        const updatedUser = await user.save();
+
+        res.status(200).send(updatedUser);
+      }
+    } catch (err) {
+      res.status(500).json({ message: err.message });
     }
   };
 }
