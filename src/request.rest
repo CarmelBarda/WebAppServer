@@ -116,3 +116,13 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5Mjhi
     "userId": "679261928bc76fb86d7d9e2c",
     "postId": "679ce63d3be6c7a6edc125ef"
 }
+
+
+### Gemini request
+GET http://localhost:3000/api/gemini
+Content-Type: application/json
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5MjhiYzc2ZmI4NmQ3ZDllMmMiLCJpYXQiOjE3Mzg2OTE2MDAsImV4cCI6MTczODY5ODgwMH0.mhVUvIb46NuKVLmYdU_0UPyHA7HcwJIqC894-weCYVE
+
+{
+    "bookName": "It ends with us"
+}
