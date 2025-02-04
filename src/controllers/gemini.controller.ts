@@ -6,7 +6,7 @@ export const sendGeminiReq = async (req: Request, res: Response) => {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
-    const bookName = req.body.bookName;
+    const bookName = req.query.bookName;
     const prompt = `I have read and liked the book: ${bookName}. 
     I want you to give me a reccomentation for my next book based on this book.
     Please return an json answer with fields: title, author, and description.
