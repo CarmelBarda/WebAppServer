@@ -8,13 +8,15 @@ export const sendGeminiReq = async (req: Request, res: Response) => {
 
     const prompt = `I have read and liked the book: ${req.query.bookName}. 
     I want you to give me a reccomentation for my next book based on this book.
-    Please return a json answer with fields: title, author, and description.
-    Please return the response without the word json at the begginning.`;
+    If you dont find any book, please return a random reccomended book.
+    Please tell me the book name and the author 
+    and a short description of the book (2-3 sentences).
+    Please put on book name quotes and a dot after the author name.
+    Please return all in plain text with no html or other formatting.`;
 
     const result = await model.generateContent(prompt);
-    const json = JSON.parse(result.response.text());
 
-    res.status(200).json(json);
+    res.status(200).json(result.response.text());
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Gemini Request Failed.' });
