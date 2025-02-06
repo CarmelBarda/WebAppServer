@@ -30,10 +30,10 @@ const router = express.Router();
  *       properties:
  *         postId:
  *           type: string
- *           description: id of the post the like belongs to
+ *           description: ID of the post the like belongs to
  *         userId:
  *           type: string
- *           description: id of the user who liked the post
+ *           description: ID of the user who liked the post
  *     LikeCreateRequest:
  *       type: object
  *       required:
@@ -42,46 +42,24 @@ const router = express.Router();
  *       properties:
  *         userId:
  *           type: string
- *           description: user id
+ *           description: User ID
  *         postId:
  *           type: string
- *           description: post id
+ *           description: Post ID
  */
 
 /**
  * @swagger
- * /api/like/{postId}:
- *   get:
- *     summary: Get likes by post id
- *     tags: [Like]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: postId
- *         required: true
- *         description: post id of the likes to get
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: The requested user ids of likes
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/likes/schemas/Like'
- *       404:
- *         description: Likes not found
- *       500:
- *         description: Internal server error
+ * tags:
+ *   name: Like
+ *   description: API for managing likes on posts
  */
-router.get('/:postId', authMiddleware, likeController.getPostLikes);
 
 /**
  * @swagger
  * /api/like:
- *   like:
- *     summary: Create a new like
+ *   post:
+ *     summary: Like a post
  *     tags: [Like]
  *     security:
  *       - bearerAuth: []
@@ -89,14 +67,16 @@ router.get('/:postId', authMiddleware, likeController.getPostLikes);
  *       required: true
  *       content:
  *         application/json:
- *             schema:
- *               $ref: '#/likes/schemas/LikeCreateRequest'
- *             example:
- *               userId: 60f7b3b2b5f7b30015f3f3b2
- *               postId: 60f7b3b2b5f7b30015f3f3b2
+ *           schema:
+ *             $ref: '#/components/schemas/LikeCreateRequest'
  *     responses:
  *       200:
- *         description: created like
+ *         description: Successfully liked the post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: "Like added successfully"
  *       500:
  *         description: Internal server error
  */
@@ -104,9 +84,36 @@ router.post('/', authMiddleware, likeController.addLike);
 
 /**
  * @swagger
+ * /api/like/{postId}:
+ *   get:
+ *     summary: Get likes for a post
+ *     tags: [Like]
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the post
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved likes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Like'
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/:postId', authMiddleware, likeController.getPostLikes);
+
+/**
+ * @swagger
  * /api/like/{postId}/{userId}:
  *   delete:
- *     summary: Delete a like
+ *     summary: Unlike a post
  *     tags: [Like]
  *     security:
  *       - bearerAuth: []
@@ -114,18 +121,23 @@ router.post('/', authMiddleware, likeController.addLike);
  *       - in: path
  *         name: postId
  *         required: true
- *         description: ID of the post to delete from
+ *         schema:
+ *           type: string
+ *         description: The ID of the post
  *       - in: path
  *         name: userId
  *         required: true
- *         description: ID of the user to delete like
  *         schema:
  *           type: string
+ *         description: The ID of the user
  *     responses:
  *       200:
- *         description: Like deleted successfully
- *       404:
- *         description: like not found
+ *         description: Successfully unliked the post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: "Like removed successfully"
  *       500:
  *         description: Internal server error
  */
