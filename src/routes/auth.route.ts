@@ -1,5 +1,6 @@
 import express from 'express';
 import { authController } from '../controllers/auth.controller';
+import authMiddleware from '../commons/middlewares/auth';
 
 const router = express.Router();
 
@@ -96,9 +97,11 @@ const router = express.Router();
  *         name:
  *           type: string
  *           description: updated name of the user
+ *           required: false
  *         image:
  *           type: string
  *           description: user's image name
+ *           required: false
  */
 
 /**
@@ -213,7 +216,7 @@ router.post('/google', authController.googleSignin);
  * /api/auth/{userId}:
  *   put:
  *     summary: Update a user by id
- *     tags: [Post]
+ *     tags: [User]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -244,6 +247,6 @@ router.post('/google', authController.googleSignin);
  *       500:
  *         description: Internal server error
  */
-router.put('/:userId', authController.updateUser);
+router.put('/:userId', authMiddleware, authController.updateUser);
 
 export default router;
