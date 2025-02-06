@@ -104,10 +104,10 @@ router.post('/', authMiddleware, likeController.addLike);
 
 /**
  * @swagger
- * /api/comment/{postId}/{userId}:
+ * /api/like/{postId}/{userId}:
  *   delete:
  *     summary: Delete a like
- *     tags: [Comment]
+ *     tags: [Like]
  *     security:
  *       - bearerAuth: []
  *     parameters:
