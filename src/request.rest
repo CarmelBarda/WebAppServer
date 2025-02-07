@@ -110,18 +110,28 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzc4M2Q1MTkx
 ### Create like
 POST http://localhost:3000/api/like
 Content-Type: application/json
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5MjhiYzc2ZmI4NmQ3ZDllMmMiLCJpYXQiOjE3MzgzNTI2ODAsImV4cCI6MTczODM1OTg4MH0.YZ7O-Ouvp8eF41Ad--s8fZfLZx9kqmEymXW5vtcoOe8
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5MjhiYzc2ZmI4NmQ3ZDllMmMiLCJpYXQiOjE3Mzg4Nzk1NDAsImV4cCI6MTczODg4Njc0MH0.uMEqftZeYDo8-RpYbYsz6TjVw6aj_ymeHZ2S8mz54PI
 
 {
     "userId": "679261928bc76fb86d7d9e2c",
     "postId": "679ce63d3be6c7a6edc125ef"
 }
 
+### Remove like
+DELETE http://localhost:3000/api/like/679ce63d3be6c7a6edc125ef/679261928bc76fb86d7d9e2c
+Content-Type: application/json
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5MjhiYzc2ZmI4NmQ3ZDllMmMiLCJpYXQiOjE3Mzg4Nzk1NDAsImV4cCI6MTczODg4Njc0MH0.uMEqftZeYDo8-RpYbYsz6TjVw6aj_ymeHZ2S8mz54PI
+
+### Get likes by post
+GET http://localhost:3000/api/like/679ce63d3be6c7a6edc125ef
+Content-Type: application/json
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5MjhiYzc2ZmI4NmQ3ZDllMmMiLCJpYXQiOjE3Mzg4Nzk1NDAsImV4cCI6MTczODg4Njc0MH0.uMEqftZeYDo8-RpYbYsz6TjVw6aj_ymeHZ2S8mz54PI
+
 
 ### Gemini request
 GET http://localhost:3000/api/gemini
 Content-Type: application/json
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5MjhiYzc2ZmI4NmQ3ZDllMmMiLCJpYXQiOjE3Mzg2OTE2MDAsImV4cCI6MTczODY5ODgwMH0.mhVUvIb46NuKVLmYdU_0UPyHA7HcwJIqC894-weCYVE
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkyNjE5MjhiYzc2ZmI4NmQ3ZDllMmMiLCJpYXQiOjE3Mzg5MTA3NjEsImV4cCI6MTczODkxNzk2MX0.YxtDUa8eihDCQT8wgJiqLsIIfHzwWF-V05K_7rJRfuA
 
 {
     "bookName": "It ends with us"
