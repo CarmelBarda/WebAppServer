@@ -43,6 +43,10 @@ const router = express.Router();
  *         rate:
  *           type: number
  *           description: post's rate
+ *         image:
+ *           type: string
+ *           description: post's image name
+ *           required: false
  *         createdAt:
  *           type: string
  *           format: date-time
