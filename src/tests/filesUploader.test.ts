@@ -23,6 +23,8 @@ beforeAll(async () => {
 
   await User.deleteMany({ email: userData.email });
 
+  await request(app).post('/api/auth/register').send(userData);
+
   const loginResponse = await request(app).post('/api/auth/login').send({
     email: 'john.doe@example.com',
     password: 'password123',
@@ -34,7 +36,6 @@ beforeAll(async () => {
 describe('File Uploader API', () => {
   it('should upload a file successfully', async () => {
     const filePath = path.join(__dirname, 'testImage.jpg');
-
     const response = await request(app)
       .post('/api/upload')
       .set('Authorization', `JWT ${accessToken}`)
