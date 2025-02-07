@@ -42,15 +42,7 @@ beforeAll(async () => {
 
 describe('File Uploader API', () => {
   it('should upload a file successfully', async () => {
-    // const response = await request(app)
-    //   .post('/api/upload')
-    //   .set('Authorization', `Bearer ${accessToken}`)
-    //   .attach('file', fileBuffer, {
-    //     filename: 'testImage.jpg',
-    //     contentType: 'image/jpeg',
-    //   });
-
-    const filePath = path.join(__dirname, 'testImage.jpg'); // Path to a real file
+    const filePath = path.join(__dirname, 'testImage.jpg');
     const response = await request(app)
       .post('/api/upload')
       .set('Authorization', `JWT ${accessToken}`)
