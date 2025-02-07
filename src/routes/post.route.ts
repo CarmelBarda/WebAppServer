@@ -46,7 +46,6 @@ const router = express.Router();
  *         image:
  *           type: string
  *           description: post's image name
- *           required: false
  *         createdAt:
  *           type: string
  *           format: date-time
