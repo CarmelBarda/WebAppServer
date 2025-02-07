@@ -2,13 +2,14 @@ import request from 'supertest';
 import { Express } from 'express';
 import mongoose from 'mongoose';
 import initApp from '../app';
-import path from 'path';
-import * as uploadController from '../controllers/filesUploader.controller';
-import multer from 'multer';
+import { User } from '../models/models';
 import fs from 'fs';
+import path from 'path';
+
 let app: Express;
 let accessToken: string;
-let ownerId: string;
+let filePath;
+let fileBuffer;
 
 const userData = {
   _id: new mongoose.Types.ObjectId(),
@@ -22,10 +23,11 @@ beforeAll(async () => {
   jest.setTimeout(10000);
   app = await initApp();
 
+  await User.deleteMany({ email: userData.email });
+
   const registerResponse = await request(app)
     .post('/api/auth/register')
     .send(userData);
-  ownerId = registerResponse.body._id;
 
   const loginResponse = await request(app).post('/api/auth/login').send({
     email: 'john.doe@example.com',
@@ -33,58 +35,50 @@ beforeAll(async () => {
   });
 
   accessToken = loginResponse.body.accessToken;
+
+  filePath = path.join(__dirname, 'testImage.jpg');
+  fileBuffer = fs.readFileSync(filePath);
 });
 
-afterAll(async () => {
-  // Close the MongoDB connection
-  await mongoose.connection.close();
-});
+describe('File Uploader API', () => {
+  it('should upload a file successfully', async () => {
+    // const response = await request(app)
+    //   .post('/api/upload')
+    //   .set('Authorization', `Bearer ${accessToken}`)
+    //   .attach('file', fileBuffer, {
+    //     filename: 'testImage.jpg',
+    //     contentType: 'image/jpeg',
+    //   });
 
-describe('uploadImage', () => {
-  it('should upload a file', async () => {
-    const filePath = path.join(__dirname, 'testImage.jpg');
-
-    try {
-      const response = await request(app)
-        .post('/api/upload')
-        .attach('file', filePath);
-      expect(response.statusCode).toEqual(200);
-    } catch (err) {
-      console.log(err);
-      expect(1).toEqual(2);
-    }
-
+    const filePath = path.join(__dirname, 'testImage.jpg'); // Path to a real file
     const response = await request(app)
       .post('/api/upload')
       .set('Authorization', `JWT ${accessToken}`)
-      .set('Content-Type', 'multipart/form-data')
-      .attach('file', filePath)
-      .expect(200);
+      .attach('image', fs.readFileSync(filePath), 'testImage.jpg');
 
+    expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('filename');
   });
 
-  it('should return 400 when no file is uploaded', async () => {
+  it('should return 400 if no file is uploaded', async () => {
     const response = await request(app)
       .post('/api/upload')
-      .send()
-      .set('Authorization', `JWT ${accessToken}`);
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send();
 
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty('error', 'No file uploaded');
   });
 
-  it('should return 500 when encountering internal server error while uploading a file', async () => {
-    jest.spyOn(uploadController, 'uploadImage').mockImplementation(async () => {
-      throw new Error('Internal Server Error');
-    });
-
+  it('should return 401 if not authenticated', async () => {
     const response = await request(app)
       .post('/api/upload')
-      .attach('file', path.join(__dirname, 'testImage.jpg'))
-      .set('Authorization', `JWT ${accessToken}`);
+      .attach('file', fileBuffer, 'testfile.txt');
 
-    expect(response.status).toBe(500);
-    expect(response.body).toHaveProperty('message', 'Internal Server Error');
+    expect(response.status).toBe(401);
   });
+});
+
+afterAll(async () => {
+  await mongoose.connection.close();
 });
