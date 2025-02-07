@@ -56,6 +56,7 @@ const router = express.Router();
  *       required:
  *         - title
  *         - review
+ *         - image
  *       properties:
  *         title:
  *           type: string
