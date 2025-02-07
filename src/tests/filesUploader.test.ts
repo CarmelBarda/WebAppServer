@@ -8,8 +8,6 @@ import path from 'path';
 
 let app: Express;
 let accessToken: string;
-let filePath;
-let fileBuffer;
 
 const userData = {
   _id: new mongoose.Types.ObjectId(),
@@ -25,24 +23,18 @@ beforeAll(async () => {
 
   await User.deleteMany({ email: userData.email });
 
-  const registerResponse = await request(app)
-    .post('/api/auth/register')
-    .send(userData);
-
   const loginResponse = await request(app).post('/api/auth/login').send({
     email: 'john.doe@example.com',
     password: 'password123',
   });
 
   accessToken = loginResponse.body.accessToken;
-
-  filePath = path.join(__dirname, 'testImage.jpg');
-  fileBuffer = fs.readFileSync(filePath);
 });
 
 describe('File Uploader API', () => {
   it('should upload a file successfully', async () => {
     const filePath = path.join(__dirname, 'testImage.jpg');
+
     const response = await request(app)
       .post('/api/upload')
       .set('Authorization', `JWT ${accessToken}`)
@@ -63,9 +55,11 @@ describe('File Uploader API', () => {
   });
 
   it('should return 401 if not authenticated', async () => {
+    const filePath = path.join(__dirname, 'testImage.jpg');
+
     const response = await request(app)
       .post('/api/upload')
-      .attach('file', fileBuffer, 'testfile.txt');
+      .attach('image', fs.readFileSync(filePath), 'testImage.jpg');
 
     expect(response.status).toBe(401);
   });
