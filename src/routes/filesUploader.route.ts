@@ -17,7 +17,7 @@ const fileFilter = (
     return cb(new Error('The image type is invalid'));
   }
 
-  cb(null, true); // Accept the file
+  cb(null, true);
 };
 
 const storage = multer.diskStorage({
@@ -29,7 +29,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage, fileFilter });
 
-// endpoint to upload he images
 router.post('/', authMiddleware, upload.single('image'), uploadImage);
 
 export default router;
