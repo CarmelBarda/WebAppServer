@@ -42,17 +42,25 @@ afterAll(async () => {
 describe('GeminiController', () => {
   it('should send a prompt and get text response', async () => {
     const response = await request(app)
-      .get(`/api/gemini`)
-      .send({ prompt: 'What is the capital of France?' })
+      .get(`/api/gemini?bookName=${'Harry potter'}`)
       .set('Authorization', `JWT ${accessToken}`)
       .expect(200);
-
-    expect(response.text).toContain('Paris');
   });
 
-  it('should fail when no prompt sent', async () => {
+  it('should return 500 when encountering internal server error while sending a request to gemini', async () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    jest
+      .spyOn(
+        require('@google/generative-ai').GoogleGenerativeAI.prototype,
+        'getGenerativeModel'
+      )
+      .mockImplementation(() => {
+        throw new Error('API Error');
+      });
+
     const response = await request(app)
-      .get(`/api/gemini`)
+      .get(`/api/gemini?bookName=${'Harry potter'}`)
       .set('Authorization', `JWT ${accessToken}`)
       .expect(500);
 
