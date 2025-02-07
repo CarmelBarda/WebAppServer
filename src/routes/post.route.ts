@@ -31,7 +31,7 @@ const router = express.Router();
  *         _id:
  *           type: string
  *           description: unique identifier of the post
- *         ownerId:
+ *         owner:
  *           type: string
  *           description: id of the user who created the post
  *         title:
@@ -40,6 +40,9 @@ const router = express.Router();
  *         review:
  *           type: string
  *           description: post's review
+ *         rate:
+ *           type: number
+ *           description: post's rate
  *         image:
  *           type: string
  *           description: post's image name
@@ -53,6 +56,7 @@ const router = express.Router();
  *       required:
  *         - title
  *         - review
+ *         - image
  *       properties:
  *         title:
  *           type: string
@@ -77,35 +81,6 @@ const router = express.Router();
  *           type: string
  *           description: post's image name
  */
-
-/**
- * @swagger
- * /api/post/{id}:
- *   get:
- *     summary: Get post by id
- *     tags: [Post]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: id of the post to get
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: The requested post
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Post'
- *       404:
- *         description: Post not found
- *       500:
- *         description: Internal server error
- */
-router.get('/:id', authMiddleware, postController.getPostById);
 
 /**
  * @swagger

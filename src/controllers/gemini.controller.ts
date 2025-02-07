@@ -16,7 +16,7 @@ export const sendGeminiReq = async (req: Request, res: Response) => {
 
     const result = await model.generateContent(prompt);
 
-    res.status(200).json(result.response.text());
+    res.status(200).send(result.response.text());
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Gemini Request Failed.' });

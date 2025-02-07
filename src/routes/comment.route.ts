@@ -120,7 +120,7 @@ router.get('/:id', authMiddleware, commentController.getCommentById);
 
 /**
  * @swagger
- * /api/comment/{postId}:
+ * /api/comment/post/{postId}:
  *   get:
  *     summary: Get comments count by post id
  *     tags: [Comment]
@@ -139,7 +139,11 @@ router.get('/:id', authMiddleware, commentController.getCommentById);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Comment'
+ *               type: object
+ *               properties:
+ *                amount:
+ *                  type: number
+ *                  description: amount of comments
  *       404:
  *         description: Comments count not found
  *       500:

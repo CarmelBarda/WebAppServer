@@ -30,27 +30,11 @@ export class PostController {
     res.status(200).json({ posts, hasMore });
   };
 
-  getPostById = async (req: Request, res: Response) => {
-    const postId = req.params.id;
-
-    if (!mongoose.Types.ObjectId.isValid(postId)) {
-      res.status(400).send({ error: "post id isn't valid" });
-    } else {
-      const post = await this.model
-        .findById({
-          _id: new mongoose.Types.ObjectId(postId),
-        })
-        .populate('owner', 'name');
-
-      res.status(200).send(post[0]);
-    }
-  };
-
   createPost = async (req: Request, res: Response) => {
     try {
       const newPost = await this.model.create(req.body);
 
-      res.status(200).send(newPost);
+      res.status(200).json(newPost);
     } catch (err) {
       res.status(500).json({ message: 'Internal Server Error' });
     }
@@ -99,7 +83,7 @@ export class PostController {
       if (!updatedPost) {
         res.status(404).json({ error: `Post ${postId} not found` });
       } else {
-        res.status(200).send(updatedPost);
+        res.status(200).json(updatedPost);
       }
     } catch (err) {
       res.status(500).json({ message: err.message });

@@ -233,8 +233,8 @@ export class AuthController {
       if (!user) {
         res.status(404).send('User not found');
       } else {
-        user.image = image;
-        user.name = name;
+        if (image) user.image = image;
+        if (name) user.name = name;
         const updatedUser = await user.save();
 
         res.status(200).send(updatedUser);
