@@ -20,7 +20,7 @@ createServer().then((app) => {
         {
           url:
             process.env.NODE_ENV === 'production'
-              ? 'https://10.10.246.125' + process.env.PORT
+              ? 'https://10.10.246.125:' + process.env.PORT
               : 'http://localhost:' + process.env.PORT,
         },
       ],
