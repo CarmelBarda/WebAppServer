@@ -20,7 +20,7 @@ createServer().then((app) => {
         {
           url:
             process.env.NODE_ENV === 'production'
-              ? 'https://node03.cs.colman.ac.il'
+              ? 'https://node125.cs.colman.ac.il'
               : 'http://localhost:' + process.env.PORT,
         },
       ],
