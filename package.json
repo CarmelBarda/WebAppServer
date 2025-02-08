@@ -8,7 +8,7 @@
     "start": "tsc && node ./dist/src/server.js",
     "build": "tsc && mkdir -p dist/front && cp -r front/. dist/front",
     "dev": "tsnd --respawn --files ./src/server.ts",
-    "prod": "tsc -p tsconfig_prod.json && node ./dist/src/server.js",
+    "prod": "tsc -p tsconfig_prod.json  && mkdir -p dist/front && cp -r front/. dist/front && node ./dist/src/server.js",
     "prod1": "cp .envprod .env && tsc -p tsconfig_prod.json && node ./dist/src/server.js"
   },
   "author": "",
