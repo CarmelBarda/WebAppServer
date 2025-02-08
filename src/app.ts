@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import express, { Express } from 'express';
 import mongoose, { Connection } from 'mongoose';
 import BaseRouter from './routes/index';
+import path from 'path';
 
 dotenv.config();
 
@@ -15,6 +16,11 @@ const createServer = async (): Promise<Express> => {
 
     app.use(cors());
     app.use(express.json());
+
+    app.use(express.static(path.join(__dirname, 'front')));
+    app.get('*', (_req, res) => {
+      res.sendFile(path.join(__dirname, 'front', 'index.html'));
+    });
 
     app.use('/api', BaseRouter);
     app.use('/uploads', express.static('uploads'));
