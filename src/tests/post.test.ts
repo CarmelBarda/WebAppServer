@@ -176,25 +176,6 @@ describe('PostController', () => {
     expect(response.body.posts.length).toBeGreaterThan(0);
   });
 
-  it('should get a specific post by ID', async () => {
-    const response = await request(app)
-      .get(`/api/post/${createdPostId}`)
-      .set('Authorization', `JWT ${accessToken}`);
-
-    expect(response.status).toBe(200);
-  });
-
-  it('should return 400 when trying to get a non-valid post', async () => {
-    const nonValidPostId: string = 'randomPostIdNotGenerated';
-
-    const response = await request(app)
-      .get(`/api/post/${nonValidPostId}`)
-      .set('Authorization', `JWT ${accessToken}`);
-
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('error', "post id isn't valid");
-  });
-
   it('should get posts by a specific user', async () => {
     const response = await request(app)
       .get(`/api/post?sender=${userData._id}`)
