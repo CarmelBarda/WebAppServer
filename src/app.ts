@@ -27,9 +27,9 @@ const createServer = async (): Promise<Express> => {
       })
     );
 
-    // app.get('*', (_req, res) => {
-    //   res.sendFile(path.join(__dirname, 'front', 'index.html'));
-    // });
+    app.get('*', (_req, res) => {
+      res.sendFile(path.join(__dirname, 'front', 'index.html'));
+    });
 
     app.use('/api', BaseRouter);
     app.use('/uploads', express.static('uploads'));
