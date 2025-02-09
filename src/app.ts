@@ -19,6 +19,7 @@ const createServer = async (): Promise<Express> => {
 
     app.use('/api', BaseRouter);
     app.use('/uploads', express.static('uploads'));
+    app.use('/public', express.static('public'));
 
     app.get('*', (req, res) => {
       if (!req.path.startsWith('/api')) {
