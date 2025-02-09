@@ -17,22 +17,7 @@ const createServer = async (): Promise<Express> => {
     app.use(cors());
     app.use(express.json());
 
-    app.use(express.static(path.join(__dirname, 'dist/src/front')));
-
-    app.use(
-      '/assets',
-      express.static(path.join(__dirname, 'dist/src/front/assets'), {
-        setHeaders: (res, path) => {
-          if (path.endsWith('.js')) {
-            res.setHeader('Content-Type', 'application/javascript');
-          }
-        },
-      })
-    );
-
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, 'dist/src/front', 'index.html'));
-    });
+    app.use(express.static('front'));
 
     app.use('/api', BaseRouter);
     app.use('/uploads', express.static('uploads'));
