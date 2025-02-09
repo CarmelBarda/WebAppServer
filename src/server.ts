@@ -55,7 +55,9 @@ createServer().then((app) => {
   server = server
     .listen(port, () => {
       if (process.env.NODE_ENV !== 'production')
-        console.log(`Server running on http://localhost:${port}`);
+        console.log(
+          `Server running on node125.cs.colman.ac.il with port : ${port}`
+        );
       else console.log(`Server running on http://localhost:${port}`);
     })
     .on('error', (err) => {
