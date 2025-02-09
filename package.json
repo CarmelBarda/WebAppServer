@@ -6,7 +6,7 @@
   "scripts": {
     "test": "tsc && jest --coverage --detectOpenHandles --forceExit",
     "start": "tsc && node ./dist/src/server.js",
-    "build": "tsc && mkdir -p dist/src/front && cp -r front/. dist/src/front",
+    "build": "tsc",
     "dev": "tsnd --respawn --files ./src/server.ts",
     "prod": "rm -r -f ./public/client && tsc -p tsconfig_prod.json && cp -a ../WebAppClient/dist ./public/client && node ./dist/src/server.js",
     "prod1": "cp .envprod .env && rm -r -f ./public/client && tsc -p tsconfig_prod.json && cp -a ../SkillSyncClient/dist ./public/client && node ./dist/src/server.js"

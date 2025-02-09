@@ -16,16 +16,9 @@ const createServer = async (): Promise<Express> => {
 
     app.use(cors());
     app.use(express.json());
-
     app.use('/api', BaseRouter);
     app.use('/uploads', express.static('uploads'));
     app.use('/public', express.static('public'));
-
-    app.get('*', (req, res) => {
-      if (!req.path.startsWith('/api')) {
-        res.sendFile(path.resolve('front', 'index.html'));
-      }
-    });
 
     dbConnection.on('error', (error) =>
       console.log(`error in db connection ${error}`)
