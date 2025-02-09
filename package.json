@@ -8,7 +8,7 @@
     "start": "tsc && node ./dist/src/server.js",
     "build": "tsc",
     "dev": "tsnd --respawn --files ./src/server.ts",
-    "prod": "rm -r -f ./public/client && tsc -p tsconfig_prod.json && cp -a ../WebAppClient/dist ./public/client && pm2 restart ecosystem.config.js --env production",
+    "prod": "rm -r -f ./public/client && tsc -p tsconfig_prod.json && cp -a ../WebAppClient/dist ./public/client && node ./dist/src/server.js",
     "prod1": "cp .envprod .env && rm -r -f ./public/client && tsc -p tsconfig_prod.json && cp -a ../SkillSyncClient/dist ./public/client && node ./dist/src/server.js"
   },
   "author": "",
