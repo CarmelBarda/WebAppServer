@@ -8,8 +8,8 @@
     "start": "tsc && node ./dist/src/server.js",
     "build": "tsc && mkdir -p dist/src/front && cp -r front/. dist/src/front",
     "dev": "tsnd --respawn --files ./src/server.ts",
-    "prod": "tsc -p tsconfig_prod.json  && mkdir -p dist/src/front && cp -r front/. dist/src/front && node ./dist/src/server.js",
-    "prod1": "cp .envprod .env && tsc -p tsconfig_prod.json && node ./dist/src/server.js"
+    "prod": "rm -r -f ./public/client && tsc -p tsconfig_prod.json && cp -a ../WebAppClient/front ./public/client && node ./dist/src/server.js",
+    "prod1": "cp .envprod .env && rm -r -f ./public/client && tsc -p tsconfig_prod.json && cp -a ../SkillSyncClient/front ./public/client && node ./dist/src/server.js"
   },
   "author": "",
   "license": "ISC",
