@@ -31,6 +31,9 @@ createServer().then((app) => {
   const specs = swaggerJsDoc(options);
 
   app.use('/api', swaggerUI.serve, swaggerUI.setup(specs));
+  app.use('*', (_, res) => {
+    res.sendFile('client/index.html', { root: 'public' });
+  });
 
   let server: Server;
   server = http.createServer(app);

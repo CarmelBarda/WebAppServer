@@ -8,6 +8,5 @@
     "outDir": "dist"
   },
   "lib": ["es2015"],
-  "exclude": ["./src/tests"],
-  "include": ["src", "front/**/*"]
+  "exclude": ["./src/tests"]
 }
